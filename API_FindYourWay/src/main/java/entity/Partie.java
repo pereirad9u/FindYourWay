@@ -34,4 +34,36 @@ public class Partie {
         }
 
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public List<Lieux> getLieux() {
+        return lieux;
+    }
+
+    public void setLieux(List<Lieux> lieux) {
+        this.lieux = lieux;
+    }
+
+    public DestinationFinal getDestinationFinal() {
+        return destinationFinal;
+    }
+
+    public void setDestinationFinal(DestinationFinal destinationFinal) {
+        this.destinationFinal = destinationFinal;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
