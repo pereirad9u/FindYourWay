@@ -18,6 +18,10 @@ public class Partie {
 
     @Id
     private String id;
+
+    private int etat;
+    private int score;
+
     @OneToMany
     @JsonBackReference
     private List<Lieux> lieux;
