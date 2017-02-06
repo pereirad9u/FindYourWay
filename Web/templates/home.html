@@ -1,0 +1,78 @@
+<div>
+    <div class=" nav-with-logo">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar5">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#!/home"><img style="width: 64px;" src="favicon.png" alt="Logo"/>Find Your Way
+                    </a>
+                </div>
+                <div id="navbar5" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="#">Accueil</a></li>
+                        <li><a href="#!/login">Connexion</a></li>
+                        <li><a href="#!/signup">Inscription</a></li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+            <!--/.container-fluid -->
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Bienvenue sur Find Your Way</h1>
+            <p>Essayez de trouver votre destination !</p>
+            <center><p><a class="btn btn-primary btn-lg" href="#" role="button">Jouez maintenant</a></p></center>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row pricing">
+            <div class="col-md-6">
+                <div class="well">
+                    <h3>Comment Jouer ?</h3>
+                    <p style="text-align: justify">FindYourWay est un jeu disponible sur ordinateur, tablette et téléphone. Le principe est le
+                        suivant : une série de points à placer sur une carte est proposée au joueur. Au fur et à
+                        mesure qu'il place ces points, un chemin est affiché sur la carte. Lorsque ces points sont
+                        bien placés, le joueur récolte un indice qui l'aidera à trouver et placer un dernier point
+                        : sa
+                        destination finale.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="well">
+                    <h3>Règle du jeu</h3>
+                   <p style="text-align: justify">une partie consiste en une séquence de 5 points correspondant à des villes ou des lieux à placer sur une carte,
+                       pour chaque point à placer, une indication textuelle ou photo est proposé au
+                       joueur. Lorsque un point est correctement placé, un indice sur la destination finale est affiché. Si le joueur découvre la destination finale il gagne la partie.
+                   </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myCarousel').carousel({
+                interval: 4000
+            });
+            var clickEvent = false;
+            $('#myCarousel').on('click', '.nav a', function () {
+                clickEvent = true;
+                $(this).parent().addClass('active');
+            }).on('slid.bs.carousel', function (e) {
+                if (!clickEvent) {
+
+                }
+                clickEvent = false;
+            });
+        });
+    </script>
+</div>
