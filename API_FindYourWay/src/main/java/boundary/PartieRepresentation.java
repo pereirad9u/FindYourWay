@@ -5,16 +5,14 @@ import entity.Partie;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.List;
 
 /**
  * Created by debian on 06/02/17.
  */
-@Path("/indices")
+@Path("/partie")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
@@ -22,6 +20,14 @@ public class PartieRepresentation {
 
     @EJB
     PartieRessource partieRessource;
+
+    @GET
+    public Response getAllPartie(@Context UriInfo uriInfo){
+        List<Partie> list_partie = this.partieRessource.findAll();
+        GenericEntity<List<Partie>> list = new GenericEntity<List<Partie>>(list_partie) {
+        };
+        return Response.ok(list, MediaType.APPLICATION_JSON).build();
+    }
 
     @GET
     @Path("/{partieId}")
@@ -41,5 +47,11 @@ public class PartieRepresentation {
         return Response.created(uri)
                 .entity(newpartie)
                 .build();
+    }
+
+    @DELETE
+    @Path("/{partieId}")
+    public void deletePartie(@PathParam("partieId") String id) {
+        this.partieRessource.delete(id);
     }
 }

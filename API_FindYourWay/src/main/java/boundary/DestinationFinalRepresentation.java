@@ -1,14 +1,14 @@
 package boundary;
 
 import entity.DestinationFinal;
+import sun.security.krb5.internal.crypto.Des;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
+import java.net.URI;
+import java.util.List;
 
 /**
  * Created by debian on 06/02/17.
@@ -23,6 +23,14 @@ public class DestinationFinalRepresentation {
     DestinationFinalRessource destinationFinalRessource;
 
     @GET
+    public Response getAllDestinationFinal(@Context UriInfo uriInfo){
+        List<DestinationFinal> list_df = this.destinationFinalRessource.findAll();
+        GenericEntity<List<DestinationFinal>> list = new GenericEntity<List<DestinationFinal>>(list_df) {
+        };
+        return Response.ok(list, MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
     @Path("/{destinationFinalId}")
     public Response getDestinationFinal(@PathParam("destinationFinalId") String destinationFinalId, @Context UriInfo uriInfo) {
         DestinationFinal destinationFinal = this.destinationFinalRessource.findById(destinationFinalId);
@@ -31,5 +39,20 @@ public class DestinationFinalRepresentation {
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+    @POST
+    public Response addDestinationFinal(DestinationFinal destinationFinal, @Context UriInfo uriInfo){
+        DestinationFinal newDestination = this.destinationFinalRessource.save(destinationFinal);
+        URI uri = uriInfo.getAbsolutePathBuilder().path(newDestination.getId()).build();
+        return Response.created(uri)
+                .entity(newDestination)
+                .build();
+    }
+
+    @DELETE
+    @Path("/{destinationFinalId}")
+    public void deleteDestinationFinal(@PathParam("destinationFinalId") String id) {
+        this.destinationFinalRessource.delete(id);
     }
 }
