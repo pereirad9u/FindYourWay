@@ -22,8 +22,10 @@ public class Indices implements Serializable {
     @JsonBackReference
     private Partie partie;
 
-    public Indices(String desc){
+    public Indices(String desc, String id){
+
         this.description = desc;
+        this.id = id;
     }
 
 }

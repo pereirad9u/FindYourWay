@@ -32,13 +32,14 @@ public class Lieux implements Serializable {
     private Indices indice;
 
 
-    public Lieux(String n,String desc,String img, float lat, float lng, Indices ind){
+    public Lieux(String n,String desc,String img, float lat, float lng, Indices ind,String id){
         this.nom = n;
         this.description = desc;
         this.image = img;
         this.lat=lat;
         this.lng = lng;
         this.indice = ind;
+        this.id=id;
     }
 
 }

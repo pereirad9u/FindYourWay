@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -18,7 +20,18 @@ public class Partie {
     @OneToMany
     @JsonBackReference
     private List<Lieux> lieux;
-    private Lieux destinationFinal;
+    private DestinationFinal destinationFinal;
+    private String token;
 
-    public Partie(){}
+    public Partie(List<Lieux> l, DestinationFinal d, String id){
+        this.lieux = l;
+        this.destinationFinal = d;
+        this.id = id;
+        try {
+            this.token=MessageDigest.getInstance("MD5").digest(Long.toBinaryString(System.currentTimeMillis()).getBytes()).toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
