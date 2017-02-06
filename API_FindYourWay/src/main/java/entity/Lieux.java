@@ -10,8 +10,8 @@ import java.io.Serializable;
  * Created by debian on 06/02/17.
  */
 @Entity
-//@XmlRootElement
-//@NamedQuery(name = "CategorieIngredient.FindAll",query = "SELECT c FROM CategorieIngredient c")
+@XmlRootElement
+@NamedQuery(name = "Lieux.FindAll",query = "SELECT l FROM Lieux l")
 public class Lieux implements Serializable {
 
     @Id
@@ -31,6 +31,7 @@ public class Lieux implements Serializable {
     @JsonBackReference
     private Indices indice;
 
+    public Lieux(){}
 
     public Lieux(String n,String desc,String img, float lat, float lng, Indices ind,String id){
         this.nom = n;

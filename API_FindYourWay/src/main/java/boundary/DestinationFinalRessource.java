@@ -12,6 +12,7 @@ import java.util.UUID;
  */
 @Stateless
 public class DestinationFinalRessource {
+
     @PersistenceContext
     EntityManager em;
 
@@ -19,8 +20,10 @@ public class DestinationFinalRessource {
         return this.em.find(DestinationFinal.class, id);
     }
 
+    /**
     public DestinationFinal save(DestinationFinal destinationFinal) {
         destinationFinal.setId(UUID.randomUUID().toString());
         return this.em.merge(destinationFinal);
     }
+     */
 }

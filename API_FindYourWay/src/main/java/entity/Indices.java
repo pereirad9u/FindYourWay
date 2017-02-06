@@ -2,25 +2,27 @@ package entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
  * Created by debian on 06/02/17.
  */
 @Entity
+@XmlRootElement
+@NamedQuery(name = "Indices.FindAll",query = "SELECT i FROM Indices i")
 public class Indices implements Serializable {
     @Id
     private String id;
 
     private String description;
 
-    @OneToMany
+    @OneToOne
     @JsonBackReference
     private Partie partie;
+
+    public Indices(){}
 
     public Indices(String desc, String id){
 

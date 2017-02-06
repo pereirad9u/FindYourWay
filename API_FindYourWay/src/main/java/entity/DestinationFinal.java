@@ -2,14 +2,20 @@ package entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by debian on 06/02/17.
  */
+@Entity
+@XmlRootElement
+@NamedQuery(name = "DestinationFinal.FindAll",query = "SELECT df FROM DestinationFinal df")
 public class DestinationFinal implements Serializable {
 
     @Id
@@ -24,6 +30,8 @@ public class DestinationFinal implements Serializable {
     @OneToMany
     @JsonBackReference
     private List<Indices> indice;
+
+    public DestinationFinal(){}
 
     public DestinationFinal(String n, String desc, String img, float lat, float lng, List<Indices> i, String id){
         this.nom = n;

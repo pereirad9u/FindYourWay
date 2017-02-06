@@ -2,8 +2,8 @@ package entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -11,8 +11,9 @@ import java.util.List;
 /**
  * Created by debian on 06/02/17.
  */
-
-
+@Entity
+@XmlRootElement
+@NamedQuery(name = "Partie.FindAll",query = "SELECT p FROM Partie p")
 public class Partie {
 
     @Id
@@ -20,8 +21,13 @@ public class Partie {
     @OneToMany
     @JsonBackReference
     private List<Lieux> lieux;
+
+    @OneToOne
+    @JsonBackReference
     private DestinationFinal destinationFinal;
     private String token;
+
+    public Partie(){}
 
     public Partie(List<Lieux> l, DestinationFinal d, String id){
         this.lieux = l;
