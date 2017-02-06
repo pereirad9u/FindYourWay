@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by debian on 06/02/17.
  */
-@Path("/destinationFinal")
+@Path("/destinationFinales")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
