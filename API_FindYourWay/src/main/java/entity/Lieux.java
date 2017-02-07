@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by debian on 06/02/17.
@@ -33,14 +34,14 @@ public class Lieux implements Serializable {
 
     public Lieux(){}
 
-    public Lieux(String n,String desc,String img, float lat, float lng, Indices ind,String id){
+    public Lieux(String n,String desc,String img, float lat, float lng, Indices ind){
         this.nom = n;
         this.description = desc;
         this.image = img;
         this.lat=lat;
         this.lng = lng;
         this.indice = ind;
-        this.id=id;
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {

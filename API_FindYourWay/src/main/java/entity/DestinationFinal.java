@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by debian on 06/02/17.
@@ -33,14 +34,14 @@ public class DestinationFinal implements Serializable {
 
     public DestinationFinal(){}
 
-    public DestinationFinal(String n, String desc, String img, float lat, float lng, List<Indices> i, String id){
+    public DestinationFinal(String n, String desc, String img, float lat, float lng, List<Indices> i){
         this.nom = n;
         this.description=desc;
         this.image = img;
         this.lat = lat;
         this.lng = lng;
         this.indice = i;
-        this.id=id;
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by debian on 06/02/17.
@@ -24,10 +25,10 @@ public class Indices implements Serializable {
 
     public Indices(){}
 
-    public Indices(String desc, String id){
+    public Indices(String desc){
 
         this.description = desc;
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {

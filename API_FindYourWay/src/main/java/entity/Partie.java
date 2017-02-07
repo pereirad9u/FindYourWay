@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by debian on 06/02/17.
@@ -33,10 +34,10 @@ public class Partie {
 
     public Partie(){}
 
-    public Partie(List<Lieux> l, DestinationFinal d, String id){
+    public Partie(List<Lieux> l, DestinationFinal d){
         this.lieux = l;
         this.destinationFinal = d;
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         try {
             this.token=MessageDigest.getInstance("MD5").digest(Long.toBinaryString(System.currentTimeMillis()).getBytes()).toString();
         } catch (NoSuchAlgorithmException e) {
