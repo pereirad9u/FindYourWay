@@ -29,7 +29,6 @@ public class Lieux implements Serializable {
     private Partie partie;
 
     @OneToOne
-    @JsonBackReference
     private Indices indice;
 
     public Lieux(){}

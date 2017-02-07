@@ -28,7 +28,6 @@ public class Partie {
     private List<Lieux> lieux;
 
     @OneToOne
-    @JsonBackReference
     private DestinationFinal destinationFinal;
     private String token;
 

@@ -20,7 +20,6 @@ public class Indices implements Serializable {
     private String description;
 
     @OneToOne
-    @JsonBackReference
     private Partie partie;
 
     public Indices(){}
