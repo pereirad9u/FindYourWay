@@ -19,15 +19,12 @@ public class Indices implements Serializable {
 
     private String description;
 
-    @OneToOne
-    private Partie partie;
 
     public Indices(){}
 
     public Indices(String desc){
 
         this.description = desc;
-        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
@@ -46,11 +43,5 @@ public class Indices implements Serializable {
         this.description = description;
     }
 
-    public Partie getPartie() {
-        return partie;
-    }
 
-    public void setPartie(Partie partie) {
-        this.partie = partie;
-    }
 }

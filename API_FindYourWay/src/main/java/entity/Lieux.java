@@ -40,7 +40,7 @@ public class Lieux implements Serializable {
         this.lat=lat;
         this.lng = lng;
         this.indice = ind;
-        this.id = UUID.randomUUID().toString();
+
     }
 
     public String getId() {

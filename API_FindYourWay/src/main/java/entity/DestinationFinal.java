@@ -41,7 +41,7 @@ public class DestinationFinal implements Serializable {
         this.lat = lat;
         this.lng = lng;
         this.indice = i;
-        this.id = UUID.randomUUID().toString();
+        
     }
 
     public String getId() {
