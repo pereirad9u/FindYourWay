@@ -295,12 +295,12 @@ body::-webkit-scrollbar {
 }
 
 .page-header > input {
-  display: block;
-  margin: 1%;
+    display: block;
+    margin: 1%;
 }
 
 .page-header > a {
-  margin-left: 1%;
+    margin-left: 1%;
 }
 .container-fluid{
     padding-right: 0 !important;
@@ -420,4 +420,44 @@ body {
 
 .nav-pills > li{
     cursor: pointer;
+}
+
+#1{
+    height: 400px;
+}
+
+.image-preview-input {
+    position: relative;
+    overflow: hidden;
+    margin: 0px;
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.image-preview-input input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+.image-preview-input-title {
+    margin-left:2px;
+}
+textarea {
+    resize: none;
+}
+
+#valider_partie {
+    width: 75%;
+    margin: auto;
+}
+
+#radioBtn .notActive {
+    color: #3276b1;
+    background-color: #fff;
 }
