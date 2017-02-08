@@ -35,6 +35,10 @@ public class PartieRepresentation {
     @GET
     public Response getAllPartie(@Context UriInfo uriInfo){
         List<Partie> list_partie = this.partieRessource.findAll();
+        for (Partie p : list_partie){
+            List<Lieux> lieuxList = this.lieuxRessource.findAll(p.getId());
+            //p.setLieux(lieuxList);
+        }
         GenericEntity<List<Partie>> list = new GenericEntity<List<Partie>>(list_partie) {
         };
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
@@ -44,6 +48,8 @@ public class PartieRepresentation {
     @Path("/{partieId}")
     public Response getPartie(@PathParam("partieId") Long partieId, @Context UriInfo uriInfo) {
         Partie partie = this.partieRessource.findById(partieId);
+        List<Lieux> lieux = this.lieuxRessource.findAll(partieId);
+        //partie.setLieux(lieux);
         if ( partie != null) {
             return Response.ok(partie).build();
         } else {
@@ -54,6 +60,7 @@ public class PartieRepresentation {
     @POST
     public Response addPartie(Partie partie, @Context UriInfo uriInfo) {
         Partie newpartie = this.partieRessource.save(partie);
+        newpartie.setLieux(this.lieuxRessource.findAll(partie.getId()));
         URI uri = uriInfo.getAbsolutePathBuilder().path(newpartie.getId().toString()).build();
         return Response.created(uri)
                 .entity(newpartie)
@@ -61,21 +68,23 @@ public class PartieRepresentation {
     }
 
     @POST
-    @Path("/{partieId}/addLieux/{lieuxId}")
-    public Response addLieux(@PathParam("partieId") Long partie_id, @PathParam("lieuxId") Long lieux_id, @Context UriInfo uriInfo){
-        Lieux l = this.lieuxRessource.findById(lieux_id);
+    @Path("/{partieId}/addLieux")
+    public Response addLieux(@PathParam("partieId") Long partie_id, List<Lieux> lieux, @Context UriInfo uriInfo){
+        //Lieux l = this.lieuxRessource.findById(lieux_id);
         Partie p = this.partieRessource.findById(partie_id);
 
 
-        List<Lieux> newLieux = p.getLieux();
-        newLieux.add(l);
-        p.setLieux(newLieux);
+        //List<Lieux> newLieux = new ArrayList<Lieux>(p.getLieux());
+
+        //newLieux.add(l);
+        //p.setLieux(newLieux);
+
+        p.setLieux(lieux);
 
         Partie update_p = this.partieRessource.save(p);
-        URI uri = uriInfo.getAbsolutePathBuilder().path(p.getId().toString()).build();
-        return Response.created(uri)
-                .entity(update_p)
-                .build();
+        URI uri = uriInfo.getAbsolutePathBuilder().path("/").path(update_p.getId().toString()).build();
+
+        return Response.created(uri).entity(update_p).build();
     }
 
     @POST
