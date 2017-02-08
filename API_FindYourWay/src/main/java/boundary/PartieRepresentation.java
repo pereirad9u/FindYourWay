@@ -31,7 +31,7 @@ public class PartieRepresentation {
 
     @GET
     @Path("/{partieId}")
-    public Response getPartie(@PathParam("partieId") String partieId, @Context UriInfo uriInfo) {
+    public Response getPartie(@PathParam("partieId") Long partieId, @Context UriInfo uriInfo) {
         Partie partie = this.partieRessource.findById(partieId);
         if ( partie != null) {
             return Response.ok(partie).build();
@@ -43,7 +43,7 @@ public class PartieRepresentation {
     @POST
     public Response addPartie(Partie partie, @Context UriInfo uriInfo) {
         Partie newpartie= this.partieRessource.save(partie);
-        URI uri = uriInfo.getAbsolutePathBuilder().path(newpartie.getId()).build();
+        URI uri = uriInfo.getAbsolutePathBuilder().path(newpartie.getId().toString()).build();
         return Response.created(uri)
                 .entity(newpartie)
                 .build();
@@ -51,7 +51,7 @@ public class PartieRepresentation {
 
     @DELETE
     @Path("/{partieId}")
-    public void deletePartie(@PathParam("partieId") String id) {
+    public void deletePartie(@PathParam("partieId") Long id) {
         this.partieRessource.delete(id);
     }
 }

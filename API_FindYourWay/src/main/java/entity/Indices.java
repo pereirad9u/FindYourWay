@@ -3,8 +3,10 @@ package entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import javax.websocket.ClientEndpoint;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by debian on 06/02/17.
@@ -13,23 +15,44 @@ import java.io.Serializable;
 @XmlRootElement
 @NamedQuery(name = "Indices.FindAll",query = "SELECT i FROM Indices i")
 public class Indices implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="id")
+    private Long id;
+
+    @ManyToOne
+    @JsonBackReference
+    private DestinationFinal destinationFinal;
+
+
+    /**
     @Id
     private String id;
+    */
 
     private String description;
 
-    @OneToOne
-    @JsonBackReference
-    private Partie partie;
 
     public Indices(){}
 
-    public Indices(String desc, String id){
-
+    public Indices(String desc){
+        this.id = id;
         this.description = desc;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
+    /**
     public String getId() {
         return id;
     }
@@ -37,7 +60,7 @@ public class Indices implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
-
+    */
     public String getDescription() {
         return description;
     }
@@ -46,11 +69,5 @@ public class Indices implements Serializable {
         this.description = description;
     }
 
-    public Partie getPartie() {
-        return partie;
-    }
 
-    public void setPartie(Partie partie) {
-        this.partie = partie;
-    }
 }
