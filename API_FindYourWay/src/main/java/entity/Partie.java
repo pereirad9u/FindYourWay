@@ -1,14 +1,15 @@
 package entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by debian on 06/02/17.
@@ -35,15 +36,21 @@ public class Partie implements Serializable{
     private int etat;
     private int score;
 
-    @OneToMany
-    @JsonBackReference
-    private List<Lieux> lieux;
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "partie")
+    @JsonManagedReference
+    private List<Lieux> lieux = new ArrayList<Lieux>();
 
-    @OneToOne
-    private DestinationFinal destinationFinal;
+    @OneToOne(cascade = {CascadeType.ALL})
+    private DestinationFinal destinationFinal = null;
     private String token;
 
-    public Partie(){}
+    public Partie(){
+        try {
+            this.token=MessageDigest.getInstance("MD5").digest(Long.toBinaryString(System.currentTimeMillis()).getBytes()).toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Partie(List<Lieux> l, DestinationFinal d){
         this.lieux = l;
@@ -77,7 +84,7 @@ public class Partie implements Serializable{
 
 
     public List<Lieux> getLieux() {
-        return lieux;
+        return this.lieux;
     }
 
     public void setLieux(List<Lieux> lieux) {
@@ -98,5 +105,21 @@ public class Partie implements Serializable{
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getEtat() {
+        return etat;
+    }
+
+    public void setEtat(int etat) {
+        this.etat = etat;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

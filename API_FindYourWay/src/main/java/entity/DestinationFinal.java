@@ -1,6 +1,7 @@
 package entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,8 +38,8 @@ public class DestinationFinal implements Serializable {
     private float lat;
     private float lng;
 
-    @OneToMany(cascade = {CascadeType.ALL})
-    @JsonBackReference
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, mappedBy = "destinationFinal")
+    @JsonManagedReference
     private List<Indices> indice = new ArrayList<Indices>(5);
 
     public DestinationFinal(){}

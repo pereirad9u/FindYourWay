@@ -41,6 +41,8 @@ public class DestinationFinalRepresentation {
     @Path("/{destinationFinalId}")
     public Response getDestinationFinal(@PathParam("destinationFinalId") Long destinationFinalId, @Context UriInfo uriInfo) {
         DestinationFinal destinationFinal = this.destinationFinalRessource.findById(destinationFinalId);
+        List<Indices> l_ind = this.indicesRessource.findAll(destinationFinalId);
+        destinationFinal.setIndice(l_ind);
         if (destinationFinal != null) {
             return Response.ok(destinationFinal).build();
         } else {

@@ -1,5 +1,8 @@
 package boundary;
 
+import entity.DestinationFinal;
+import entity.Indices;
+import entity.Lieux;
 import entity.Partie;
 
 import javax.ejb.EJB;
@@ -7,7 +10,9 @@ import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by debian on 06/02/17.
@@ -20,6 +25,12 @@ public class PartieRepresentation {
 
     @EJB
     PartieRessource partieRessource;
+    @EJB
+    LieuxRessource lieuxRessource;
+    @EJB
+    DestinationFinalRessource destinationFinalRessource;
+    @EJB
+    IndicesRessource indicesRessource;
 
     @GET
     public Response getAllPartie(@Context UriInfo uriInfo){
@@ -42,10 +53,41 @@ public class PartieRepresentation {
 
     @POST
     public Response addPartie(Partie partie, @Context UriInfo uriInfo) {
-        Partie newpartie= this.partieRessource.save(partie);
+        Partie newpartie = this.partieRessource.save(partie);
         URI uri = uriInfo.getAbsolutePathBuilder().path(newpartie.getId().toString()).build();
         return Response.created(uri)
                 .entity(newpartie)
+                .build();
+    }
+
+    @POST
+    @Path("/{partieId}/addLieux/{lieuxId}")
+    public Response addLieux(@PathParam("partieId") Long partie_id, @PathParam("lieuxId") Long lieux_id, @Context UriInfo uriInfo){
+        Lieux l = this.lieuxRessource.findById(lieux_id);
+        Partie p = this.partieRessource.findById(partie_id);
+
+
+        List<Lieux> newLieux = p.getLieux();
+        newLieux.add(l);
+        p.setLieux(newLieux);
+
+        Partie update_p = this.partieRessource.save(p);
+        URI uri = uriInfo.getAbsolutePathBuilder().path(p.getId().toString()).build();
+        return Response.created(uri)
+                .entity(update_p)
+                .build();
+    }
+
+    @POST
+    @Path("/{partieId}/addDestinationFinal/{dfId}")
+    public Response addDestinationFinal(@PathParam("partieId") Long partie_id, @PathParam("dfId") Long df_id, @Context UriInfo uriInfo){
+        DestinationFinal df = this.destinationFinalRessource.findById(df_id);
+        Partie p = this.partieRessource.findById(partie_id);
+        p.setDestinationFinal(df);
+        Partie update_p = this.partieRessource.save(p);
+        URI uri = uriInfo.getAbsolutePathBuilder().path(p.getId().toString()).build();
+        return Response.created(uri)
+                .entity(update_p)
                 .build();
     }
 
