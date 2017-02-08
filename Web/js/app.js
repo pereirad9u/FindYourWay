@@ -42,9 +42,24 @@ app.controller("AdminController", [ "$scope", "leafletMarkerEvents", function($s
             lng: -0.09,
             draggable: true,
             message: "I'm a draggable marker",
-            focus: true
+            focus: true,
+            icon: {
+                type : "awesomeMarker",
+                markerColor : "red"
+            }
         }
     }
+
+    $scope.layers = {
+        baselayers : {
+            xyz: {
+                name: 'OpenStreetMap',
+                url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoicGVyZWlyYWQ5dSIsImEiOiJjaXl4MXJodDcwMDMyMzNwZmJwc2JxbnFpIn0.Lvolt_wjqpvnfVBRJG-lAA',
+                type: 'xyz',
+                id: 'mapbox.streets',
+            }
+        }
+    };
 
     $scope.events = {
         markers: {
