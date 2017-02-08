@@ -1,0 +1,5 @@
+INSERT INTO public.lieux (id, description, image, lat, lng, nom, indice_id, partie_id) VALUES (2, 'ceci est le lieu 1 de la partie 1', 'image du lieu 1 de la partie 1', 0, 0, 'lieu 1', 1, null);
+INSERT INTO public.lieux (id, description, image, lat, lng, nom, indice_id, partie_id) VALUES (4, 'ceci est le lieu 2 de la partie 1', 'image du lieu 2 de la partie 1', 0, 0, 'lieu 1', 3, null);
+INSERT INTO public.lieux (id, description, image, lat, lng, nom, indice_id, partie_id) VALUES (6, 'ceci est le lieu 3 de la partie 1', 'image du lieu 3 de la partie 1', 0, 0, 'lieu 1', 5, null);
+INSERT INTO public.lieux (id, description, image, lat, lng, nom, indice_id, partie_id) VALUES (8, 'ceci est le lieu 4 de la partie 1', 'image du lieu 4 de la partie 1', 0, 0, 'lieu 1', 7, null);
+INSERT INTO public.lieux (id, description, image, lat, lng, nom, indice_id, partie_id) VALUES (10, 'ceci est le lieu 5 de la partie 1', 'image du lieu 5 de la partie 1', 0, 0, 'lieu 1', 9, null);

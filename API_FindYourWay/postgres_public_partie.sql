@@ -1,0 +1,1 @@
+INSERT INTO public.partie (id, etat, score, token, destinationfinal_id) VALUES (23, 0, 0, '[B@7750717a', 11);

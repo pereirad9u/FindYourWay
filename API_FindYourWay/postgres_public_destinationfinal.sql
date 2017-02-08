@@ -1,0 +1,2 @@
+INSERT INTO public.destinationfinal (id, description, image, lat, lng, nom) VALUES (11, 'ceci est la destination finale de la partie 1', 'image de la DF partie 1', 0, 0, 'DF partie 1');
+INSERT INTO public.destinationfinal (id, description, image, lat, lng, nom) VALUES (17, 'ceci est la destination finale de la partie 2', 'image de la DF partie 2', 0, 0, 'DF partie 2');
