@@ -20,5 +20,6 @@ jboss/server/minimal/work/**/*
 
 
 .idea/
+API_FindYourWay/lp_cisiie.iml
 API_FindYourWay/target/lp_cisiie.war
-API_FindYourWay/target/lp_cisiie/META-INF/MANIFEST.MF
+API_FindYourWay/target/lp_cisiie/META-INF/MANIFEST.MF 
