@@ -24,6 +24,10 @@ public class Indices implements Serializable {
     @Column(name="id")
     private Long id;
 
+    @ManyToOne
+    @JsonBackReference
+    private DestinationFinal destinationFinal;
+
 
     /**
     @Id

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,20 +37,18 @@ public class DestinationFinal implements Serializable {
     private float lat;
     private float lng;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     @JsonBackReference
-    private List<Indices> indice;
+    private List<Indices> indice = new ArrayList<Indices>(5);
 
     public DestinationFinal(){}
 
-    public DestinationFinal(String n, String desc, String img, float lat, float lng, List<Indices> i){
+    public DestinationFinal(String n, String desc, String img, float lat, float lng){
         this.nom = n;
         this.description=desc;
         this.image = img;
         this.lat = lat;
         this.lng = lng;
-        this.indice = i;
-        
     }
 
     public Long getId() {

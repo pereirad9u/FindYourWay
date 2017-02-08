@@ -1,6 +1,7 @@
 package boundary;
 
 import entity.DestinationFinal;
+import entity.Indices;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
@@ -26,6 +27,8 @@ public class DestinationFinalRessource {
         q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
         return q.getResultList();
     }
+
+
 
     public DestinationFinal save(DestinationFinal destinationFinal) {
         //destinationFinal.setId(UUID.randomUUID().toString());

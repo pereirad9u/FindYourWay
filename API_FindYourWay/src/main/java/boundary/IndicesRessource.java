@@ -27,6 +27,14 @@ public class IndicesRessource {
         return q.getResultList();
     }
 
+    public List<Indices> findAll(Long idDf){
+        Query q = this.em.createQuery("SELECT i FROM Indices i where i.destinationFinal.id= :id ");
+        q.setParameter("id", idDf);
+        // pour éviter les pbs de cache
+        //q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+        return q.getResultList();
+    }
+
     public Indices save(Indices indices) {
         //indices.setId(UUID.randomUUID().toString());
         /**
