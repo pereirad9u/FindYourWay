@@ -29,7 +29,115 @@
         <div class="panel panel-primary">
             <div class="panel-heading">Page administateur</div>
             <div class="panel-body">
+                <p>Choix création : </p>
+                <ul class="nav nav-tabs">
+                    <li class="active" ng-click="choixCreation()"><a data-toggle="tab">Point</a></li>
+                    <li ng-click="choixCreation()"><a data-toggle="tab">Destination</a></li>
+                </ul>
+                <div class="row" style="margin-top: 1%">
+                    <div class="col-md-6">
+                        <leaflet event-broadcast="events" layers="layers" lf-center="center" markers="markers"
+                                 height="400px"></leaflet>
+                    </div>
+                    <div class="col-md-6">
+                        <div ng-show="choixPoint">
+                            <div class="row">
+                                <h4>Explications : </h4>
+                                <p>Pour ajouter un point, placez le marqueur sur la carte à l'endroit souhaité.</p>
+                                <p>Une fois le point choisi, ajoutez une indication afin que le joueur puisse le
+                                    localiser lors d'une partie.</p>
+                            </div>
+                            <h4>Creation d'un point : </h4>
+                            <form role="form">
+                                <div class="form-group">
+                                    <label for="indication">Indication pour le point</label>
+                                    <input ng-model="indication" type="text" class="form-control" id="indication"
+                                           placeholder=""/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="latitude">Latitude</label>
+                                    <input ng-model="lat" type="text" readonly class="form-control" id="latitude"/>
+                                </div>
+                                <div class="form-group col-md-6 ">
+                                    <label for="longitude">Longitude</label>
+                                    <input ng-model="lng" type="text" readonly class="form-control" id="longitude"/>
+                                </div>
+                                <div class="form-group col-md-12 col-md-offset-9">
+                                    <input type="button" ng-click="ajouterLieux()" class="btn btn-primary btn-lg"
+                                           id="button"
+                                           value="Valider"/>
+                                </div>
+                            </form>
+                        </div>
+                        <div ng-show="!choixPoint">
+                            <h4>Explications : </h4>
+                            <p>Pour ajouter une destination finale, placez le marqueur sur la carte à l'endroit
+                                souhaité.</p>
+                            <p>Une fois le point choisi, ajoutez les cinq indices afin que le joueur puisse le
+                                localiser lors d'une partie.</p>
+                            <p>Enfin, entrez une description et le nom du lieux pour le faire découvrir au
+                                joueur.</p>
+                            <h4>Creation d'une Destination : </h4>
+                            <form role="form">
+                                <div class="form-group col-md-12">
+                                    <div class="form-group col-md-6">
+                                        <label for="indice1">Indice 1 :</label>
+                                        <input ng-model="indice1" type="text" class="form-control" id="indice1"
+                                               placeholder=""/>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="indice2">Indice 2 :</label>
+                                        <input ng-model="indice2" type="text" class="form-control" id="indice2"
+                                               placeholder=""/>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="indice3">Indice 3 :</label>
+                                        <input ng-model="indice3" type="text" class="form-control" id="indice3"
+                                               placeholder=""/>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="indice4">Indice 4 :</label>
+                                        <input ng-model="indice4" type="text" class="form-control" id="indice4"
+                                               placeholder=""/>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="indice5">Indice 5 :</label>
+                                        <input ng-model="indice5" type="text" class="form-control" id="indice5"
+                                               placeholder=""/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="!choixPoint" class="row">
+                    <div class="form-group col-md-6">
+                        <label for="nom">Nom :</label>
+                        <input ng-model="nom" type="text" class="form-control col-md-6" id="nom"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="lat">Latitude :</label>
+                        <input ng-model="lat" type="text" readonly class="form-control" id="lat"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="lng">Longitude :</label>
+                        <input ng-model="lng" type="text" readonly class="form-control" id="lng"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="desc">Description :</label>
+                        <textarea ng-model="desc" rows="3" class="form-control col-md-6" id="desc"></textarea>
+                    </div>
+
+                    <div class="form-group col-md-12" style="text-align: right">
+                        <input type="button" ng-click="ajouterDestination()"
+                               class="btn btn-primary btn-lg"
+                               value="Valider"/>
+                    </div>
+                </div>
             </div>
-    </div>
+        </div>
     </div>
 </div>

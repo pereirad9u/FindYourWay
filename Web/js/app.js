@@ -1,4 +1,6 @@
-var app = angular.module('findYourWay', ['ngRoute','leaflet-directive']);
+var app = angular.module('findYourWay', ['ngRoute', 'ngResource', 'leaflet-directive']);
+app.constant('api', {'url': 'localhost:8080/API_FindYourWay/api/'});
+
 
 app.config(['$routeProvider',
     function ($routeProvider) {
@@ -12,13 +14,17 @@ app.config(['$routeProvider',
             })
             .when('/admin', {
                 templateUrl: 'templates/admin.html',
-                controller : 'AdminController'
+                controller: 'AdminController'
             })
             .when('/signup', {
                 templateUrl: 'templates/inscription.html'
             })
             .when('/homeCo', {
                 templateUrl: 'templates/homeCo.html'
+            })
+            .when('/game', {
+                templateUrl: 'templates/game.html',
+                controller: 'GameController'
             })
             .otherwise({
                 redirectTo: '/home'
@@ -27,31 +33,88 @@ app.config(['$routeProvider',
 
 ]);
 
+app.factory('Lieux', ['$resource', 'api', function ($resource, api) {
+    return $resource(api.url + "/lieux/:id", {id: '@_id'},
+        {
+            update: {method: "POST"}
+        });
+}]);
 
-app.controller("AdminController", [ "$scope", "leafletMarkerEvents", function($scope, leafletMarkerEvents) {
+app.factory('Destination', ['$resource', 'api', function ($resource, api) {
+    return $resource(api.url + "/destinationFinales/:id", {id: '@_id'},
+        {
+            update: {method: "POST"}
+        });
+}]);
 
-    $scope.center = {
-        lat: 51.505,
-        lng: -0.09,
-        zoom: 8
-    };
+
+app.controller("AdminController", ["$scope", "Lieux", "Destination", "leafletMarkerEvents", function ($scope, Lieux, Destination, leafletMarkerEvents) {
+
+    $scope.choixPoint = true;
 
     $scope.markers = {
-        london: {
-            lat: 51.505,
-            lng: -0.09,
+        point: {
+            lat: 48.8587741,
+            lng: 2.32,
             draggable: true,
-            message: "I'm a draggable marker",
+            message: "Déplacez moi !",
             focus: true,
             icon: {
-                type : "awesomeMarker",
-                markerColor : "red"
+                type: "awesomeMarker",
+                icon: "star",
+                markerColor: "red"
             }
         }
-    }
+    };
+
+    $scope.lat = $scope.markers.point.lat;
+    $scope.lng = $scope.markers.point.lng;
+
+    $scope.choixCreation = function () {
+        $scope.choixPoint = !$scope.choixPoint;
+    };
+
+    $scope.ajouterLieux = function() {
+        $scope.newLieux = new Lieux({
+            description : $scope.indication,
+            lat : $scope.lat,
+            lng : $scope.lng
+        });
+        $scope.newLieux.$save(function (success) {
+            console.log(success);
+        }, function (error) {
+            console.log(error);
+        });
+    };
+
+    $scope.ajouterDestination = function () {
+      $scope.newDestination = new Destination({
+          nom : $scope.nom,
+          description : $scope.description,
+          lat : $scope.lat,
+          lng : $scope.lng,
+          indices : [{description : $scope.indice1},
+              {description : $scope.indice2},
+              {description : $scope.indice3},
+              {description : $scope.indice4},
+              {description : $scope.indice5}]
+      });
+      $scope.newDestination.$save(function (success) {
+            console.log(success);
+        }, function (error) {
+            console.log(error);
+        });
+    };
+
+    $scope.center = {
+        lat: 48.8587741,
+        lng: 2.2074741,
+        zoom: 6
+    };
+
 
     $scope.layers = {
-        baselayers : {
+        baselayers: {
             xyz: {
                 name: 'OpenStreetMap',
                 url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoicGVyZWlyYWQ5dSIsImEiOiJjaXl4MXJodDcwMDMyMzNwZmJwc2JxbnFpIn0.Lvolt_wjqpvnfVBRJG-lAA',
@@ -67,12 +130,9 @@ app.controller("AdminController", [ "$scope", "leafletMarkerEvents", function($s
         }
     };
 
-    $scope.eventDetected = "No events yet...";
-    var markerEvents = leafletMarkerEvents.getAvailableEvents();
-    for (var k in markerEvents){
-        var eventName = 'leafletDirectiveMarker.' + markerEvents[k];
-        $scope.$on(eventName, function(event, args){
-            $scope.eventDetected = event.name;
-        });
-    }
+    $scope.$on("leafletDirectiveMarker.dragend", function (event, args) {
+        $scope.lat = args.model.lat;
+        $scope.lng = args.model.lng;
+    });
+
 }]);
