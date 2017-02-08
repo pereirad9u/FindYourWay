@@ -36,7 +36,7 @@ public class PartieRepresentation {
     public Response getAllPartie(@Context UriInfo uriInfo){
         List<Partie> list_partie = this.partieRessource.findAll();
         for (Partie p : list_partie){
-            List<Lieux> lieuxList = this.lieuxRessource.findAll(p.getId());
+            //List<Lieux> lieuxList = this.lieuxRessource.findAll(p.getId());
             //p.setLieux(lieuxList);
         }
         GenericEntity<List<Partie>> list = new GenericEntity<List<Partie>>(list_partie) {
@@ -48,7 +48,7 @@ public class PartieRepresentation {
     @Path("/{partieId}")
     public Response getPartie(@PathParam("partieId") Long partieId, @Context UriInfo uriInfo) {
         Partie partie = this.partieRessource.findById(partieId);
-        List<Lieux> lieux = this.lieuxRessource.findAll(partieId);
+        //List<Lieux> lieux = this.lieuxRessource.findAll(partieId);
         //partie.setLieux(lieux);
         if ( partie != null) {
             return Response.ok(partie).build();

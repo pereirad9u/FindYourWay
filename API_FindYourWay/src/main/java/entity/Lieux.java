@@ -1,10 +1,12 @@
 package entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -35,9 +37,9 @@ public class Lieux implements Serializable {
     private float lat;
     private float lng;
 
-    @ManyToOne
-    @JsonBackReference
-    private Partie partie;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JsonManagedReference
+    private List<Partie> parties;
 
     @OneToOne(cascade = {CascadeType.ALL})
     private Indices indice;
@@ -110,12 +112,12 @@ public class Lieux implements Serializable {
         this.lng = lng;
     }
 
-    public Partie getPartie() {
-        return partie;
+    public List<Partie> getParties() {
+        return parties;
     }
 
-    public void setPartie(Partie partie) {
-        this.partie = partie;
+    public void setPartie(List<Partie> parties) {
+        this.parties = parties;
     }
 
     public Indices getIndice() {

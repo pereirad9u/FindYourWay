@@ -36,7 +36,7 @@ public class Partie implements Serializable{
     private int etat;
     private int score;
 
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "partie")
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JsonManagedReference
     private List<Lieux> lieux;
 
