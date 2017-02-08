@@ -15,7 +15,7 @@ public class LieuxRessource {
     @PersistenceContext
     EntityManager em;
 
-    public Lieux findById(String id){
+    public Lieux findById(Long id){
         return this.em.find(Lieux.class, id);
     }
 
@@ -27,11 +27,11 @@ public class LieuxRessource {
     }
 
     public Lieux save(Lieux lieux) {
-        lieux.setId(UUID.randomUUID().toString());
+        //lieux.setId(UUID.randomUUID().toString());
         return this.em.merge(lieux);
     }
 
-    public void delete(String id) {
+    public void delete(Long id) {
         try {
             Lieux ref = this.em.getReference(Lieux.class, id);
             this.em.remove(ref);

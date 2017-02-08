@@ -16,7 +16,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="" />
         <datasource-mapping>
-          <factory-entry name="findyourwayPU" />
+          <factory-entry name="findyourwayPU" value="1d790580-7891-4bf9-b3a3-3b255f496e33" />
           <factory-entry name="messagesPU" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />

@@ -16,7 +16,7 @@ public class DestinationFinalRessource {
     @PersistenceContext
     EntityManager em;
 
-    public DestinationFinal findById(String id){
+    public DestinationFinal findById(Long id){
         return this.em.find(DestinationFinal.class, id);
     }
 
@@ -28,11 +28,11 @@ public class DestinationFinalRessource {
     }
 
     public DestinationFinal save(DestinationFinal destinationFinal) {
-        destinationFinal.setId(UUID.randomUUID().toString());
+        //destinationFinal.setId(UUID.randomUUID().toString());
         return this.em.merge(destinationFinal);
     }
 
-    public void delete(String id) {
+    public void delete(Long id) {
         try {
             DestinationFinal ref = this.em.getReference(DestinationFinal.class, id);
             this.em.remove(ref);

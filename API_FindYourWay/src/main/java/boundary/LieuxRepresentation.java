@@ -30,7 +30,7 @@ public class LieuxRepresentation {
 
     @GET
     @Path("/{lieuId}")
-    public Response getLieu(@PathParam("lieuId") String lieuId, @Context UriInfo uriInfo) {
+    public Response getLieu(@PathParam("lieuId") Long lieuId, @Context UriInfo uriInfo) {
         Lieux lieux = this.lieuxRessource.findById(lieuId);
         if (lieux != null) {
             return Response.ok(lieux).build();
@@ -42,7 +42,7 @@ public class LieuxRepresentation {
     @POST
     public Response addLieux(Lieux lieux, @Context UriInfo uriInfo) {
         Lieux newlieux = this.lieuxRessource.save(lieux);
-        URI uri = uriInfo.getAbsolutePathBuilder().path(newlieux.getId()).build();
+        URI uri = uriInfo.getAbsolutePathBuilder().path(newlieux.getId().toString()).build();
         return Response.created(uri)
                 .entity(newlieux)
                 .build();
@@ -50,7 +50,7 @@ public class LieuxRepresentation {
 
     @DELETE
     @Path("/{lieuId}")
-    public void deleteLieux(@PathParam("lieuId") String id) {
+    public void deleteLieux(@PathParam("lieuId") Long id) {
         this.lieuxRessource.delete(id);
     }
 }

@@ -33,7 +33,7 @@ public class IndicesRepresentation {
 
     @GET
     @Path("/{indiceId}")
-    public Response getIndice(@PathParam("indiceId") String indiceId, @Context UriInfo uriInfo) {
+    public Response getIndice(@PathParam("indiceId") Long indiceId, @Context UriInfo uriInfo) {
         Indices indices = this.indicesRessource.findById(indiceId);
         if (indices != null) {
             return Response.ok(indices).build();
@@ -45,7 +45,7 @@ public class IndicesRepresentation {
     @POST
     public Response addIndices(Indices indices, @Context UriInfo uriInfo){
         Indices newIndices = this.indicesRessource.save(indices);
-        URI uri = uriInfo.getAbsolutePathBuilder().path(newIndices.getId()).build();
+        URI uri = uriInfo.getAbsolutePathBuilder().path(newIndices.getId().toString()).build();
         return Response.created(uri)
                 .entity(newIndices)
                 .build();
@@ -53,7 +53,7 @@ public class IndicesRepresentation {
 
     @DELETE
     @Path("/{indiceId}")
-    public void deleteIndices(@PathParam("indiceId") String id) {
+    public void deleteIndices(@PathParam("indiceId") Long id) {
         this.indicesRessource.delete(id);
     }
 }

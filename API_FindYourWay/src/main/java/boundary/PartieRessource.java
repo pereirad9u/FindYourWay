@@ -15,7 +15,7 @@ public class PartieRessource {
     @PersistenceContext
     EntityManager em;
 
-    public Partie findById(String id){
+    public Partie findById(Long id){
         return this.em.find(Partie.class, id);
     }
 
@@ -27,11 +27,11 @@ public class PartieRessource {
     }
 
     public Partie save(Partie partie) {
-        partie.setId(UUID.randomUUID().toString());
+        //partie.setId(UUID.randomUUID().toString());
         return this.em.merge(partie);
     }
 
-    public void delete(String id) {
+    public void delete(Long id) {
         try {
             Partie ref = this.em.getReference(Partie.class, id);
             this.em.remove(ref);

@@ -2,10 +2,7 @@ package entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.List;
@@ -19,8 +16,19 @@ import java.util.UUID;
 @NamedQuery(name = "DestinationFinal.FindAll",query = "SELECT df FROM DestinationFinal df")
 public class DestinationFinal implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="id")
+    private Long id;
+
+    /**
+    @Id
+    //@GeneratedValue(strategy=GenerationType.SEQUENCE)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
+    */
 
     private String description;
     private String nom;
@@ -44,6 +52,15 @@ public class DestinationFinal implements Serializable {
         
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
     public String getId() {
         return id;
     }
@@ -51,6 +68,9 @@ public class DestinationFinal implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+    **/
+
+
 
     public String getDescription() {
         return description;

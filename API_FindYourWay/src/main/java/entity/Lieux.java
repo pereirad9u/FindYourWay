@@ -15,8 +15,19 @@ import java.util.UUID;
 @NamedQuery(name = "Lieux.FindAll",query = "SELECT l FROM Lieux l")
 public class Lieux implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="id")
+    private Long id;
+
+    /**
+    @Id
+    //@GeneratedValue(strategy=GenerationType.SEQUENCE)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
+    */
 
     private String description;
     private String nom;
@@ -28,21 +39,28 @@ public class Lieux implements Serializable {
     @JsonBackReference
     private Partie partie;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Indices indice;
 
     public Lieux(){}
 
-    public Lieux(String n,String desc,String img, float lat, float lng, Indices ind){
+    public Lieux(String n,String desc,String img, float lat, float lng){
         this.nom = n;
         this.description = desc;
         this.image = img;
         this.lat=lat;
         this.lng = lng;
-        this.indice = ind;
-
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
     public String getId() {
         return id;
     }
@@ -50,6 +68,7 @@ public class Lieux implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+    */
 
     public String getDescription() {
         return description;

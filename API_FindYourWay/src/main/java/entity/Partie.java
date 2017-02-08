@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -15,10 +16,21 @@ import java.util.UUID;
 @Entity
 @XmlRootElement
 @NamedQuery(name = "Partie.FindAll",query = "SELECT p FROM Partie p")
-public class Partie {
+public class Partie implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="id")
+    private Long id;
+
+    /***
+    @Id
+    //@GeneratedValue(strategy=GenerationType.SEQUENCE)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
+    */
 
     private int etat;
     private int score;
@@ -44,6 +56,15 @@ public class Partie {
 
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
     public String getId() {
         return id;
     }
@@ -51,6 +72,9 @@ public class Partie {
     public void setId(String id) {
         this.id = id;
     }
+    */
+
+
 
     public List<Lieux> getLieux() {
         return lieux;

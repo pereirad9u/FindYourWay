@@ -32,7 +32,7 @@ public class DestinationFinalRepresentation {
 
     @GET
     @Path("/{destinationFinalId}")
-    public Response getDestinationFinal(@PathParam("destinationFinalId") String destinationFinalId, @Context UriInfo uriInfo) {
+    public Response getDestinationFinal(@PathParam("destinationFinalId") Long destinationFinalId, @Context UriInfo uriInfo) {
         DestinationFinal destinationFinal = this.destinationFinalRessource.findById(destinationFinalId);
         if (destinationFinal != null) {
             return Response.ok(destinationFinal).build();
@@ -44,7 +44,7 @@ public class DestinationFinalRepresentation {
     @POST
     public Response addDestinationFinal(DestinationFinal destinationFinal, @Context UriInfo uriInfo){
         DestinationFinal newDestination = this.destinationFinalRessource.save(destinationFinal);
-        URI uri = uriInfo.getAbsolutePathBuilder().path(newDestination.getId()).build();
+        URI uri = uriInfo.getAbsolutePathBuilder().path(newDestination.getId().toString()).build();
         return Response.created(uri)
                 .entity(newDestination)
                 .build();
@@ -52,7 +52,7 @@ public class DestinationFinalRepresentation {
 
     @DELETE
     @Path("/{destinationFinalId}")
-    public void deleteDestinationFinal(@PathParam("destinationFinalId") String id) {
+    public void deleteDestinationFinal(@PathParam("destinationFinalId") Long id) {
         this.destinationFinalRessource.delete(id);
     }
 }

@@ -16,7 +16,7 @@ public class IndicesRessource {
     @PersistenceContext
     EntityManager em;
 
-    public Indices findById(String id){
+    public Indices findById(Long id){
         return this.em.find(Indices.class, id);
     }
 
@@ -28,11 +28,19 @@ public class IndicesRessource {
     }
 
     public Indices save(Indices indices) {
-        indices.setId(UUID.randomUUID().toString());
+        //indices.setId(UUID.randomUUID().toString());
+        /**
+        List<Indices> list = this.findAll();
+        for (Indices ind : list){
+            if(ind.getId().equals(indices.getId())){
+                return ind;
+            }
+        }
+         */
         return this.em.merge(indices);
     }
 
-    public void delete(String id) {
+    public void delete(Long id) {
         try {
             Indices ref = this.em.getReference(Indices.class, id);
             this.em.remove(ref);
