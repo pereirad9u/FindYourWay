@@ -7,6 +7,17 @@
     width: auto;
 }
 
+.truncate {
+    max-width: 177px;
+}
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
+}
+
 
 /* EXAMPLE 5 - Logo with Text*/
 .nav-with-logo .navbar-brand {

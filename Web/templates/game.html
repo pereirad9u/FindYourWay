@@ -29,7 +29,133 @@
         <div class="panel panel-primary">
             <div class="panel-heading">Voici votre carte !</div>
             <div class="panel-body">
-
+                <div class="row">
+                    <div class="col-md-3">
+                        <div ng-show="!jeuFini">
+                            <div class="panel panel-success" ng-show="pointEnCour < 5">
+                                <div class="panel-heading">Indications pour le point {{pointEnCour + 1}}</div>
+                                <div class="panel-body">
+                                    <p>{{indication}}</p>
+                                </div>
+                                <div class="col-md-12">
+                                    <h4>Emplacement du point : </h4>
+                                    <div class="group-form col-md-6">
+                                        <label for="lat">Latitude</label>
+                                        <input ng-model="lat" type="text" readonly class="form-control" id="lat"/>
+                                    </div>
+                                    <div class="group-form col-md-6" style="margin-bottom: 15px">
+                                        <label for="lng">Longitude</label>
+                                        <input ng-model="lng" type="text" readonly class="form-control" id="lng"/>
+                                    </div>
+                                    <div class="group-form ">
+                                        <input type="button" ng-click="validerPoint()" class="btn btn-primary col-md-12"
+                                               id="button" value="Valider le point {{pointEnCour + 1}} ?">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-success" ng-show="pointEnCour > 4">
+                                <div class="panel-heading">Indication pour la destination finale</div>
+                                <div class="panel-body">
+                                    <p>Afin de trouver la destination finale, veuillez utiliser les indices que vous
+                                        avez
+                                        précédemment trouver.</p>
+                                </div>
+                                <div class="col-md-12">
+                                    <h4>Emplacement du point : </h4>
+                                    <div class="group-form col-md-6">
+                                        <label for="lat">Latitude</label>
+                                        <input ng-model="lat" type="text" readonly class="form-control" id="lat"/>
+                                    </div>
+                                    <div class="group-form col-md-6" style="margin-bottom: 15px">
+                                        <label for="lng">Longitude</label>
+                                        <input ng-model="lng" type="text" readonly class="form-control" id="lng"/>
+                                    </div>
+                                    <div class="group-form ">
+                                        <input type="button" ng-click="validerDestinationFinale()"
+                                               class="btn btn-primary col-md-12"
+                                               value="Valider la destination finale ?">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="jeuFini">
+                            <div class="panel panel-success">
+                                <div class="panel-heading">Information sur la destination finale</div>
+                                <div class="panel-body">
+                                    <h4>Nom : </h4>
+                                    <p>{{destinationFinale.nom}}</p>
+                                    <h4>Description : </h4>
+                                    <p class="truncate">{{destinationFinale.description}}</p>
+                                    <h4>Localisation : </h4>
+                                    <p>[{{destinationFinale.lat}}, {{destinationFinale.lng}}]</p>
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#myModal">
+                                            En savoir plus...
+                                        </button>
+                                    </div>
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                        {{destinationFinale.nom}}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h4>Description :</h4>
+                                                    <p>{{destinationFinale.description}}</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-info">
+                                <div class="panel-heading">Votre résultat :</div>
+                                <div class="panel-body">
+                                    <h4>Votre score : </h4>
+                                    <p>{{score}}</p>
+                                    <h4>Précision : </h4>
+                                    <p>{{distance}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <leaflet paths="paths" event-broadcast="events" layers="layers" lf-center="center"
+                                 markers="markers"
+                                 height="500px"></leaflet>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">Indices</div>
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item" style="margin-bottom: 1%"
+                                        ng-repeat="(key, i) in indices">
+                                        <p>{{i.description}}</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row text-right">
+                            <div class="col-md-12">
+                                <button class="btn btn-primary">Menu</button>
+                                <button class="btn btn-primary">Rejouer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
