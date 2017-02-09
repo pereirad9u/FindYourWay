@@ -27,6 +27,14 @@ public class PartieRessource {
         return q.getResultList();
     }
 
+    public List<Partie> findAll(Long lieux_id){
+        Query q = this.em.createQuery("SELECT p FROM Partie p where p.lieux.id= :id ");
+        q.setParameter("id", lieux_id);
+        // pour éviter les pbs de cache
+        //q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+        return q.getResultList();
+    }
+
     public Partie save(Partie partie) {
         //partie.setId(UUID.randomUUID().toString());
         return this.em.merge(partie);

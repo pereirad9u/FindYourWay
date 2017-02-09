@@ -1,11 +1,14 @@
 package entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,6 +18,9 @@ import java.util.UUID;
 @Entity
 @XmlRootElement
 @NamedQuery(name = "Lieux.FindAll",query = "SELECT l FROM Lieux l")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Lieux implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,12 +43,14 @@ public class Lieux implements Serializable {
     private float lat;
     private float lng;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    /**
+    @ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "lieux")
     @JsonManagedReference
-    private List<Partie> parties;
+    private List<Partie> parties = new ArrayList<Partie>();
+    */
 
     @OneToOne(cascade = {CascadeType.ALL})
-    private Indices indice;
+    private Indices indice = null;
 
     public Lieux(){}
 
@@ -112,6 +120,7 @@ public class Lieux implements Serializable {
         this.lng = lng;
     }
 
+    /**
     public List<Partie> getParties() {
         return parties;
     }
@@ -119,6 +128,7 @@ public class Lieux implements Serializable {
     public void setPartie(List<Partie> parties) {
         this.parties = parties;
     }
+    */
 
     public Indices getIndice() {
         return indice;

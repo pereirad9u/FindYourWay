@@ -23,6 +23,8 @@ import java.util.Set;
 @Stateless
 public class PartieRepresentation {
 
+    private String tokenAdmin = "admin";
+
     @EJB
     PartieRessource partieRessource;
     @EJB
@@ -35,10 +37,6 @@ public class PartieRepresentation {
     @GET
     public Response getAllPartie(@Context UriInfo uriInfo){
         List<Partie> list_partie = this.partieRessource.findAll();
-        for (Partie p : list_partie){
-            //List<Lieux> lieuxList = this.lieuxRessource.findAll(p.getId());
-            //p.setLieux(lieuxList);
-        }
         GenericEntity<List<Partie>> list = new GenericEntity<List<Partie>>(list_partie) {
         };
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
@@ -48,8 +46,6 @@ public class PartieRepresentation {
     @Path("/{partieId}")
     public Response getPartie(@PathParam("partieId") Long partieId, @Context UriInfo uriInfo) {
         Partie partie = this.partieRessource.findById(partieId);
-        //List<Lieux> lieux = this.lieuxRessource.findAll(partieId);
-        //partie.setLieux(lieux);
         if ( partie != null) {
             return Response.ok(partie).build();
         } else {
@@ -70,15 +66,7 @@ public class PartieRepresentation {
     @POST
     @Path("/{partieId}/addLieux")
     public Response addLieux(@PathParam("partieId") Long partie_id, List<Lieux> lieux, @Context UriInfo uriInfo){
-        //Lieux l = this.lieuxRessource.findById(lieux_id);
         Partie p = this.partieRessource.findById(partie_id);
-
-
-        //List<Lieux> newLieux = new ArrayList<Lieux>(p.getLieux());
-
-        //newLieux.add(l);
-        //p.setLieux(newLieux);
-
         p.setLieux(lieux);
 
         Partie update_p = this.partieRessource.save(p);

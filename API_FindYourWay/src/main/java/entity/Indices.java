@@ -26,7 +26,10 @@ public class Indices implements Serializable {
 
     @ManyToOne
     @JsonBackReference
-    private DestinationFinal destinationFinal;
+    private DestinationFinal destinationFinal = null;
+
+    @OneToOne(cascade = {CascadeType.ALL})
+    private Lieux lieux = null;
 
 
     /**

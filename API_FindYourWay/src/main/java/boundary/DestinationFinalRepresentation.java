@@ -20,6 +20,8 @@ import java.util.List;
 @Stateless
 public class DestinationFinalRepresentation {
 
+    private String tokenAdmin = "admin";
+
     @EJB
     DestinationFinalRessource destinationFinalRessource;
     @EJB
@@ -60,18 +62,25 @@ public class DestinationFinalRepresentation {
     }
 
     @POST
-    public Response addDestinationFinal(DestinationFinal destinationFinal, @Context UriInfo uriInfo){
-        DestinationFinal newDestination = this.destinationFinalRessource.save(destinationFinal);
-        URI uri = uriInfo.getAbsolutePathBuilder().path(newDestination.getId().toString()).build();
-        return Response.created(uri)
-                .entity(newDestination)
-                .build();
+    @Path("/{tokenAdmin}")
+    public Response addDestinationFinal(@PathParam("tokenAdmin") String tokenAdmin, DestinationFinal destinationFinal, @Context UriInfo uriInfo){
+        if (tokenAdmin.equals(this.tokenAdmin)) {
+            DestinationFinal newDestination = this.destinationFinalRessource.save(destinationFinal);
+            URI uri = uriInfo.getAbsolutePathBuilder().path(newDestination.getId().toString()).build();
+            return Response.created(uri)
+                    .entity(newDestination)
+                    .build();
+        }else{
+            return Response.serverError().status(403).build();
+        }
     }
 
     @DELETE
-    @Path("/{destinationFinalId}")
-    public void deleteDestinationFinal(@PathParam("destinationFinalId") Long id) {
-        this.destinationFinalRessource.delete(id);
+    @Path("/{destinationFinalId}/{tokenAdmin}")
+    public void deleteDestinationFinal(@PathParam("destinationFinalId") Long id, @PathParam("tokenAdmin") String tokenAdmin) {
+        if (tokenAdmin.equals(this.tokenAdmin)) {
+            this.destinationFinalRessource.delete(id);
+        }
     }
 
     private String getUriForSelfDestiationFinal(UriInfo uriInfo, DestinationFinal df){

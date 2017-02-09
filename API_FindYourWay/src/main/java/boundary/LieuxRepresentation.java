@@ -1,12 +1,14 @@
 package boundary;
 
 import entity.Lieux;
+import entity.Partie;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,8 +19,13 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class LieuxRepresentation {
+
+    private String tokenAdmin = "admin";
+
     @EJB
     LieuxRessource lieuxRessource;
+    @EJB
+    PartieRessource partieRessource;
 
     @GET
     public Response getAllLieux(@Context UriInfo uriInfo){
@@ -40,17 +47,26 @@ public class LieuxRepresentation {
     }
 
     @POST
-    public Response addLieux(Lieux lieux, @Context UriInfo uriInfo) {
-        Lieux newlieux = this.lieuxRessource.save(lieux);
-        URI uri = uriInfo.getAbsolutePathBuilder().path(newlieux.getId().toString()).build();
-        return Response.created(uri)
-                .entity(newlieux)
-                .build();
+    @Path("/{tokenAdmin}")
+    public Response addLieux(@PathParam("tokenAdmin") String tokenAdmin, Lieux lieux, @Context UriInfo uriInfo) {
+        if (tokenAdmin.equals(this.tokenAdmin)){
+            Lieux newlieux = this.lieuxRessource.save(lieux);
+            //newlieux.setPartie(this.partieRessource.findAll(lieux.getId()));
+            URI uri = uriInfo.getAbsolutePathBuilder().path(newlieux.getId().toString()).build();
+            return Response.created(uri)
+                    .entity(newlieux)
+                    .build();
+        }else{
+            return Response.serverError().status(403).build();
+        }
+
     }
 
     @DELETE
-    @Path("/{lieuId}")
-    public void deleteLieux(@PathParam("lieuId") Long id) {
-        this.lieuxRessource.delete(id);
+    @Path("/{lieuId}/{tokenAdmin}")
+    public void deleteLieux(@PathParam("lieuId") Long id, @PathParam("tokenAdmin") String tokenAdmin) {
+        if (tokenAdmin.equals(this.tokenAdmin)){
+            this.lieuxRessource.delete(id);
+        }
     }
 }

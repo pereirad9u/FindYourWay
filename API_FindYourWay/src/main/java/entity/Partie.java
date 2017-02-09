@@ -1,7 +1,9 @@
 package entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -17,6 +19,9 @@ import java.util.*;
 @Entity
 @XmlRootElement
 @NamedQuery(name = "Partie.FindAll",query = "SELECT p FROM Partie p")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Partie implements Serializable{
 
     private static final long serialVersionUID = 1L;
@@ -39,7 +44,7 @@ public class Partie implements Serializable{
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JsonManagedReference
-    private List<Lieux> lieux;
+    private List<Lieux> lieux = new ArrayList<Lieux>();
 
     @OneToOne(cascade = {CascadeType.ALL})
     private DestinationFinal destinationFinal = null;
