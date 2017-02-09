@@ -2,6 +2,7 @@ package boundary;
 
 import entity.Lieux;
 import entity.Partie;
+import provider.Secured;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -19,8 +20,6 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class LieuxRepresentation {
-
-    private String tokenAdmin = "admin";
 
     @EJB
     LieuxRessource lieuxRessource;
@@ -47,26 +46,21 @@ public class LieuxRepresentation {
     }
 
     @POST
-    @Path("/{tokenAdmin}")
-    public Response addLieux(@PathParam("tokenAdmin") String tokenAdmin, Lieux lieux, @Context UriInfo uriInfo) {
-        if (tokenAdmin.equals(this.tokenAdmin)){
-            Lieux newlieux = this.lieuxRessource.save(lieux);
-            //newlieux.setPartie(this.partieRessource.findAll(lieux.getId()));
-            URI uri = uriInfo.getAbsolutePathBuilder().path(newlieux.getId().toString()).build();
-            return Response.created(uri)
+    @Secured
+    public Response addLieux(Lieux lieux, @Context UriInfo uriInfo) {
+        Lieux newlieux = this.lieuxRessource.save(lieux);
+        //newlieux.setPartie(this.partieRessource.findAll(lieux.getId()));
+        URI uri = uriInfo.getAbsolutePathBuilder().path(newlieux.getId().toString()).build();
+        return Response.created(uri)
                     .entity(newlieux)
                     .build();
-        }else{
-            return Response.serverError().status(403).build();
-        }
 
     }
 
     @DELETE
-    @Path("/{lieuId}/{tokenAdmin}")
-    public void deleteLieux(@PathParam("lieuId") Long id, @PathParam("tokenAdmin") String tokenAdmin) {
-        if (tokenAdmin.equals(this.tokenAdmin)){
-            this.lieuxRessource.delete(id);
-        }
+    @Secured
+    @Path("/{lieuId}")
+    public void deleteLieux(@PathParam("lieuId") Long id) {
+        this.lieuxRessource.delete(id);
     }
 }
