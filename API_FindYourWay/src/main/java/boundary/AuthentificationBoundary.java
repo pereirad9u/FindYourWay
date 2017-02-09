@@ -41,7 +41,7 @@ public class AuthentificationBoundary {
             authentifie(nomUtilisateur, motDePasse);
             // On fournit un token
             String token = issueToken(nomUtilisateur);
-            System.out.println(token);
+            //System.out.println(token);
             return Response.ok().header(AUTHORIZATION, "Bearer " + token).build();
 
         } catch (Exception e) {
