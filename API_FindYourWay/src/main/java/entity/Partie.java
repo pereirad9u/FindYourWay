@@ -35,6 +35,7 @@ public class Partie implements Serializable{
 
     private int etat;
     private int score;
+    private String username;
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JsonManagedReference
@@ -52,9 +53,10 @@ public class Partie implements Serializable{
         }
     }
 
-    public Partie(List<Lieux> l, DestinationFinal d){
+    public Partie(List<Lieux> l, DestinationFinal d, String u){
         this.lieux = l;
         this.destinationFinal = d;
+        this.username = u;
         try {
             this.token=MessageDigest.getInstance("MD5").digest(Long.toBinaryString(System.currentTimeMillis()).getBytes()).toString();
         } catch (NoSuchAlgorithmException e) {
