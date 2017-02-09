@@ -1,6 +1,7 @@
 package boundary;
 
 import entity.Indices;
+import provider.Secured;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -19,8 +20,6 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class IndicesRepresentation {
-
-    private String tokenAdmin = "admin";
 
     @EJB
     IndicesRessource indicesRessource;
@@ -45,25 +44,19 @@ public class IndicesRepresentation {
     }
 
     @POST
-    @Path("/{tokenAdmin}")
-    public Response addIndices(@PathParam("tokenAdmin") String tokenAdmin, Indices indices, @Context UriInfo uriInfo){
-        if (tokenAdmin.equals(this.tokenAdmin)){
+    @Secured
+    public Response addIndices(Indices indices, @Context UriInfo uriInfo){
             Indices newIndices = this.indicesRessource.save(indices);
             URI uri = uriInfo.getAbsolutePathBuilder().path(newIndices.getId().toString()).build();
             return Response.created(uri)
                     .entity(newIndices)
                     .build();
-        }else{
-            return Response.serverError().status(403).build();
-        }
-
     }
 
     @DELETE
-    @Path("/{indiceId}/{tokenAdmin}")
-    public void deleteIndices(@PathParam("indiceId") Long id, @PathParam("tokenAdmin") String tokenAdmin) {
-        if (tokenAdmin.equals(this.tokenAdmin)){
+    @Secured
+    @Path("/{indiceId}")
+    public void deleteIndices(@PathParam("indiceId") Long id) {
             this.indicesRessource.delete(id);
-        }
     }
 }

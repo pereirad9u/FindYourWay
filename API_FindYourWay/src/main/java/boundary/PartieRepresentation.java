@@ -23,8 +23,6 @@ import java.util.Set;
 @Stateless
 public class PartieRepresentation {
 
-    private String tokenAdmin = "admin";
-
     @EJB
     PartieRessource partieRessource;
     @EJB
