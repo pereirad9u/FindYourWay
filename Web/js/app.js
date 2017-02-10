@@ -1,5 +1,5 @@
 var app = angular.module('findYourWay', ['ngRoute', 'ngResource', 'leaflet-directive']);
-app.constant('api', {'url': 'localhost:8080/API_FindYourWay/api/'});
+app.constant('api', {'url': 'http://localhost:8080/API_FindYourWay/api/'});
 
 
 app.config(['$routeProvider',
@@ -10,7 +10,8 @@ app.config(['$routeProvider',
                 templateUrl: 'templates/home.html'
             })
             .when('/login', {
-                templateUrl: 'templates/login.html'
+                templateUrl: 'templates/login.html',
+                controller: 'AdminController'
             })
             .when('/admin', {
                 templateUrl: 'templates/admin.html',
@@ -47,8 +48,13 @@ app.factory('Destination', ['$resource', 'api', function ($resource, api) {
         });
 }]);
 
+app.factory('Admin', ['$resource', 'api', function ($resource, api) {
+    return $resource(api.url + "authentification",
+        {
+        });
+}]);
 
-app.controller("AdminController", ["$scope", "Lieux", "Destination", "leafletMarkerEvents", function ($scope, Lieux, Destination, leafletMarkerEvents) {
+app.controller("AdminController", ["$scope", "$location", "Admin", "Lieux", "Destination", "leafletMarkerEvents", function ($scope, $location, Admin, Lieux, Destination, leafletMarkerEvents) {
 
     $scope.choixPoint = true;
 
@@ -65,6 +71,19 @@ app.controller("AdminController", ["$scope", "Lieux", "Destination", "leafletMar
                 markerColor: "red"
             }
         }
+    };
+
+    $scope.login = function() {
+        $scope.newAdmin = new Admin({
+            username : $scope.username,
+            password : $scope.password
+        });
+        $scope.newAdmin.$save(function(success) {
+            console.log(success);
+        },function (error) {
+            console.log(error)
+        });
+
     };
 
     $scope.lat = $scope.markers.point.lat;
