@@ -20,9 +20,6 @@ app.config(['$routeProvider', '$httpProvider', 'TokenServiceProvider',
                 templateUrl: 'templates/startGame.html',
                 controller: 'GameController'
             })
-            .when('/signup', {
-                templateUrl: 'templates/inscription.html'
-            })
             .when('/homeCo', {
                 templateUrl: 'templates/homeCo.html'
             })
@@ -71,7 +68,7 @@ app.service('TokenService', [function () {
     }
 }]);
 
-app.controller("AdminController", ["$scope",  "$location", "TokenService", "Admin", "Lieux", "Destination", "leafletMarkerEvents", function ($scope, $location, TokenService, Admin, Lieux, Destination, leafletMarkerEvents) {
+app.controller("AdminController", ["$http","$scope",  "$location", "TokenService", "Admin", "Lieux", "Destination", "leafletMarkerEvents", function ($http,$scope, $location, TokenService, Admin, Lieux, Destination, leafletMarkerEvents) {
 
     $scope.choixPoint = true;
 
@@ -97,6 +94,7 @@ app.controller("AdminController", ["$scope",  "$location", "TokenService", "Admi
         },function (s) {
             console.log(s);
             TokenService.setToken(s.token);
+            $http.defaults.headers.common.Authorization = TokenService.getToken();
             $location.path("/admin");
         },function (e) {
             console.log(e)
@@ -175,19 +173,128 @@ app.controller("AdminController", ["$scope",  "$location", "TokenService", "Admi
 
 app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux", "Destination", "leafletMarkerEvents", function ($scope, $location, $anchorScroll, Lieux, Destination, leafletMarkerEvents) {
 
-    $scope.username = "";
-    $scope.jeuFini = false;
-    $scope.indices = [];
-    $scope.pointEnCour = 0;
-    $scope.D = 1000;
-    $scope.couleur = ["purple", "green", "cadetblue", "orange", "blue"];
-    $scope.destinationFinale = {};
-    $scope.points = [];
-    $scope.indication = $scope.points[$scope.pointEnCour].description;
 
-    $scope.paths = {
+    Lieux.query(function (s) {
+        Destination.query(function (d) {
+            $scope.username = "";
+            $scope.jeuFini = false;
+            $scope.indices = [];
+            $scope.pointEnCour = 0;
+            $scope.D = 1000;
+            s.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
+            console.log(s);
+            $scope.points = {0:s[0], 1:s[1], 2:s[2], 3:s[3], 4:s[4]};
+            d.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
+            console.log(d);
+            $scope.destinationFinale = d[0];
 
-    };
+            $scope.couleur = ["purple", "green", "cadetblue", "orange", "blue"];
+            $scope.indication = $scope.points[$scope.pointEnCour].description;
+            $scope.paths = {};
+            $scope.lat = $scope.markers[$scope.pointEnCour].lat;
+            $scope.lng = $scope.markers[$scope.pointEnCour].lng;
+
+            $scope.validerPoint = function () {
+                var dist = L.latLng($scope.lat, $scope.lng).distanceTo(L.latLng($scope.points[$scope.pointEnCour].lat, $scope.points[$scope.pointEnCour].lng))
+                if (dist < $scope.D) {
+                    $scope.indices[$scope.pointEnCour] = $scope.destinationFinale.indice[$scope.pointEnCour];
+                }else{
+                    $scope.indices[$scope.pointEnCour] = {description : "Pas d'indice, votre point était trop loin ..."};
+                }
+
+                if ($scope.pointEnCour > 0) {
+                    console.log('ok');
+                    $scope.paths[$scope.pointEnCour - 1 ] = {
+                        type : "polyline",
+                        weight : 3,
+                        color : "blue",
+                        latlngs: [{ lat: $scope.lat, lng: $scope.lng }, { lat: $scope.markers[$scope.pointEnCour -1].lat, lng: $scope.markers[$scope.pointEnCour -1 ].lng }]
+                    }
+                }
+
+                $scope.markers[$scope.pointEnCour].draggable = false;
+                $scope.markers[$scope.pointEnCour].lat = $scope.lat;
+                $scope.markers[$scope.pointEnCour].lng = $scope.lng;
+                $scope.markers[$scope.pointEnCour].message = "Point "+($scope.pointEnCour+1);
+                $scope.pointEnCour++;
+                if ($scope.pointEnCour < 5) {
+                    $scope.indication = $scope.points[$scope.pointEnCour].description;
+                    $scope.markers[$scope.pointEnCour] = {
+                        lat: 48,
+                        lng: 2,
+                        draggable: true,
+                        message: "Point " + ($scope.pointEnCour + 1) + ", Déplacez moi !",
+                        focus: true,
+                        icon: {
+                            type: "awesomeMarker",
+                            prefix : "glyphicon",
+                            icon: "asterisk",
+                            markerColor: $scope.couleur[$scope.pointEnCour - 1]
+                        }
+                    }
+                }
+                else {
+                    $scope.markers[$scope.pointEnCour] = {
+                        lat: 48,
+                        lng: 2,
+                        draggable: true,
+                        message: "Destination finale, Déplacez moi !",
+                        focus: true,
+                        icon: {
+                            type: "awesomeMarker",
+                            icon: "star",
+                            markerColor: $scope.couleur[$scope.pointEnCour - 1]
+                        }
+                    }
+                }
+                $scope.lat = $scope.markers[$scope.pointEnCour].lat;
+                $scope.lng = $scope.markers[$scope.pointEnCour].lng;
+
+            };
+
+            $scope.validerDestinationFinale = function() {
+                $scope.markers[$scope.pointEnCour] = {
+                    lat: $scope.lat,
+                    lng: $scope.lng,
+                    draggable: false,
+                    message: "Destination finale",
+                    focus: true,
+                    icon: {
+                        type: "awesomeMarker",
+                        icon: "star",
+                        markerColor: $scope.couleur[$scope.pointEnCour-1]
+                    }
+                };
+                $scope.jeuFini = true;
+
+
+
+                var dist = L.latLng($scope.lat, $scope.lng).distanceTo(L.latLng($scope.destinationFinale.lat, $scope.destinationFinale.lng));
+                if (dist > 1000)
+                    $scope.distance = (dist/1000).toFixed(2) + " km";
+                else
+                    $scope.distance = Math.round(dist).toFixed(2) + " m";
+                if ( dist < $scope.D)
+                    $scope.score = $scope.D;
+                else if (dist > $scope.D && dist < 2*$scope.D)
+                    $scope.score = $scope.D*.75;
+                else if (dist > 2*$scope.D && dist < 4*$scope.D)
+                    $scope.score = $scope.D*.55;
+                else if (dist > 4*$scope.D && dist < 6*$scope.D)
+                    $scope.score = $scope.D*.35;
+                else if (dist > 6*$scope.D && dist < 8*$scope.D)
+                    $scope.score = $scope.D*.15;
+                else if (dist > 8*$scope.D)
+                    $scope.score = $scope.D*.05;
+                $scope.paths[$scope.pointEnCour - 1 ] = {
+                    type : "polyline",
+                    weight : 3,
+                    color : "blue",
+                    latlngs: [{ lat: $scope.lat, lng: $scope.lng }, { lat: $scope.markers[$scope.pointEnCour -1].lat, lng: $scope.markers[$scope.pointEnCour -1 ].lng }]
+                }
+            }
+        })
+    });
 
     $scope.markers = {
         0: {
@@ -204,9 +311,6 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
             }
         }
     };
-
-    $scope.lat = $scope.markers[$scope.pointEnCour].lat;
-    $scope.lng = $scope.markers[$scope.pointEnCour].lng;
 
     $scope.center = {
         lat: 45,
@@ -238,114 +342,11 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
     });
 
     $scope.startGame = function() {
-
         $location.path("/game");
-        $scope.points = Lieux.query();
-        $scope.destinationFinale = Destination.query();
-    };
-
-        //lieux.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
-        //destinationFinale.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
-        //$scope.points = {0:lieux[0], 1:lieux[1], 2:lieux[2], 3:lieux[3], 4:lieux[4]};
-        /*console.log($scope.destinationFinale);*/
-    
-    $scope.validerPoint = function () {
-        console.log($scope.points);
-        var dist = L.latLng($scope.lat, $scope.lng).distanceTo(L.latLng($scope.points[$scope.pointEnCour].lat, $scope.points[$scope.pointEnCour].lng))
-        if (dist < $scope.D) {
-            $scope.indices[$scope.pointEnCour] = $scope.destinationFinale.indices[$scope.pointEnCour];
-        }else{
-            $scope.indices[$scope.pointEnCour] = {description : "Pas d'indice, votre point était trop loin ..."};
-        }
-
-        if ($scope.pointEnCour > 0) {
-            $scope.paths[$scope.pointEnCour - 1 ] = {
-                type : "polyline",
-                weight : 3,
-                color : "blue",
-                latlngs: [{ lat: $scope.lat, lng: $scope.lng }, { lat: $scope.markers[$scope.pointEnCour -1].lat, lng: $scope.markers[$scope.pointEnCour -1 ].lng }]
-            }
-        }
-
-        $scope.markers[$scope.pointEnCour].draggable = false;
-        $scope.markers[$scope.pointEnCour].lat = $scope.lat;
-        $scope.markers[$scope.pointEnCour].lng = $scope.lng;
-        $scope.markers[$scope.pointEnCour].message = "Point "+($scope.pointEnCour+1);
-        $scope.pointEnCour++;
-        if ($scope.pointEnCour < 5) {
-            $scope.indication = $scope.points[$scope.pointEnCour].description;
-            $scope.markers[$scope.pointEnCour] = {
-                lat: 48,
-                lng: 2,
-                draggable: true,
-                message: "Point " + ($scope.pointEnCour + 1) + ", Déplacez moi !",
-                focus: true,
-                icon: {
-                    type: "awesomeMarker",
-                    prefix : "glyphicon",
-                    icon: "asterisk",
-                    markerColor: $scope.couleur[$scope.pointEnCour - 1]
-                }
-            }
-        }
-        else {
-            $scope.markers[$scope.pointEnCour] = {
-                lat: 48,
-                lng: 2,
-                draggable: true,
-                message: "Destination finale, Déplacez moi !",
-                focus: true,
-                icon: {
-                    type: "awesomeMarker",
-                    icon: "star",
-                    markerColor: $scope.couleur[$scope.pointEnCour - 1]
-                }
-            }
-        }
-        $scope.lat = $scope.markers[$scope.pointEnCour].lat;
-        $scope.lng = $scope.markers[$scope.pointEnCour].lng;
 
     };
 
-    $scope.validerDestinationFinale = function() {
-        $scope.markers[$scope.pointEnCour] = {
-            lat: $scope.lat,
-            lng: $scope.lng,
-            draggable: false,
-            message: "Destination finale",
-            focus: true,
-            icon: {
-                type: "awesomeMarker",
-                icon: "star",
-                markerColor: $scope.couleur[$scope.pointEnCour-1]
-            }
-        };
-        $scope.jeuFini = true;
 
-        
 
-        var dist = L.latLng($scope.lat, $scope.lng).distanceTo(L.latLng($scope.destinationFinale.lat, $scope.destinationFinale.lng));
-        if (dist > 1000)
-            $scope.distance = (dist/1000).toFixed(2) + " km";
-        else
-            $scope.distance = Math.round(dist).toFixed(2) + " m";
-        if ( dist < $scope.D)
-            $scope.score = $scope.D;
-        else if (dist > $scope.D && dist < 2*$scope.D)
-            $scope.score = $scope.D*.75;
-        else if (dist > 2*$scope.D && dist < 4*$scope.D)
-            $scope.score = $scope.D*.55;
-        else if (dist > 4*$scope.D && dist < 6*$scope.D)
-            $scope.score = $scope.D*.35;
-        else if (dist > 6*$scope.D && dist < 8*$scope.D)
-            $scope.score = $scope.D*.15;
-        else if (dist > 8*$scope.D)
-            $scope.score = $scope.D*.05;
-        $scope.paths[$scope.pointEnCour - 1 ] = {
-            type : "polyline",
-            weight : 3,
-            color : "blue",
-            latlngs: [{ lat: $scope.lat, lng: $scope.lng }, { lat: $scope.markers[$scope.pointEnCour -1].lat, lng: $scope.markers[$scope.pointEnCour -1 ].lng }]
-        }
-    }
+
 }]);
