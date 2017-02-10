@@ -26,13 +26,6 @@ public class LieuxRessource {
         return q.getResultList();
     }
 
-    public List<Lieux> findAll(Long partie_id){
-        Query q = this.em.createQuery("SELECT l FROM Lieux l where l.partie.id= :id ");
-        q.setParameter("id", partie_id);
-        // pour éviter les pbs de cache
-        //q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
-        return q.getResultList();
-    }
 
     public Lieux save(Lieux lieux) {
         //lieux.setId(UUID.randomUUID().toString());

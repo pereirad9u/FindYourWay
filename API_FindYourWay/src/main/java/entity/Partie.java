@@ -1,9 +1,6 @@
 package entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -19,9 +16,6 @@ import java.util.*;
 @Entity
 @XmlRootElement
 @NamedQuery(name = "Partie.FindAll",query = "SELECT p FROM Partie p")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Partie implements Serializable{
 
     private static final long serialVersionUID = 1L;
@@ -40,13 +34,15 @@ public class Partie implements Serializable{
 
     private int etat;
     private int score;
-    private String username;
+    //private String username;
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JsonManagedReference
+    @JsonIgnore
     private List<Lieux> lieux = new ArrayList<Lieux>();
 
     @OneToOne(cascade = {CascadeType.ALL})
+    @JsonIgnore
     private DestinationFinal destinationFinal = null;
     private String token;
 
@@ -58,10 +54,21 @@ public class Partie implements Serializable{
         }
     }
 
+    public Partie(int et, int s, String u){
+        this.etat = et;
+        this.score = s;
+        //this.username = u;
+        try {
+            this.token=MessageDigest.getInstance("MD5").digest(Long.toBinaryString(System.currentTimeMillis()).getBytes()).toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Partie(List<Lieux> l, DestinationFinal d, String u){
         this.lieux = l;
         this.destinationFinal = d;
-        this.username = u;
+        //this.username = u;
         try {
             this.token=MessageDigest.getInstance("MD5").digest(Long.toBinaryString(System.currentTimeMillis()).getBytes()).toString();
         } catch (NoSuchAlgorithmException e) {

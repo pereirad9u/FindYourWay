@@ -18,9 +18,6 @@ import java.util.UUID;
 @Entity
 @XmlRootElement
 @NamedQuery(name = "Lieux.FindAll",query = "SELECT l FROM Lieux l")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Lieux implements Serializable {
 
     private static final long serialVersionUID = 1L;
