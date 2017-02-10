@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.POST;
@@ -41,8 +43,10 @@ public class AuthentificationBoundary {
             authentifie(nomUtilisateur, motDePasse);
             // On fournit un token
             String token = issueToken(nomUtilisateur);
+            JsonObject jsonToken = Json.createObjectBuilder().
+                    add("token", token).build();
             //System.out.println(token);
-            return Response.ok().header(AUTHORIZATION, "Bearer " + token).build();
+            return Response.ok().header(AUTHORIZATION, "Bearer " + token).entity(jsonToken).build();
 
         } catch (Exception e) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
