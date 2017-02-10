@@ -55,7 +55,7 @@ public class PartieRepresentation {
     @POST
     public Response addPartie(Partie partie, @Context UriInfo uriInfo) {
         Partie newpartie = this.partieRessource.save(partie);
-        //newpartie.setLieux(new ArrayList<>());
+        newpartie.setLieux(new ArrayList<>());
         URI uri = uriInfo.getAbsolutePathBuilder().path(newpartie.getId().toString()).build();
         return Response.created(uri)
                 .entity(newpartie)
