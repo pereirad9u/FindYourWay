@@ -1,9 +1,9 @@
 var app = angular.module('findYourWay', ['ngRoute', 'ngResource', 'leaflet-directive']);
-app.constant('api', {'url': 'http://localhost:8080/API_FindYourWay/api/'});
+app.constant('api', {'url': 'http://127.0.0.1:8080/lp_cisiie/api/'});
 
 
-app.config(['$routeProvider',
-    function ($routeProvider) {
+app.config(['$routeProvider', '$httpProvider',
+    function ($routeProvider, $httpProvider) {
         // Système de routage
         $routeProvider
             .when('/home', {
@@ -16,6 +16,10 @@ app.config(['$routeProvider',
             .when('/admin', {
                 templateUrl: 'templates/admin.html',
                 controller: 'AdminController'
+            })
+            .when('/startGame', {
+                templateUrl: 'templates/startGame.html',
+                controller: 'GameController'
             })
             .when('/signup', {
                 templateUrl: 'templates/inscription.html'
@@ -35,22 +39,25 @@ app.config(['$routeProvider',
 ]);
 
 app.factory('Lieux', ['$resource', 'api', function ($resource, api) {
-    return $resource(api.url + "/lieux/:id", {id: '@_id'},
+    return $resource(api.url + "lieux/:id", {id: '@_id'},
         {
-            update: {method: "POST"}
+            update: {method: "POST"},
+            get: {method: "GET", url: api.url + "lieux"}
         });
 }]);
 
 app.factory('Destination', ['$resource', 'api', function ($resource, api) {
-    return $resource(api.url + "/destinationFinales/:id", {id: '@_id'},
+    return $resource(api.url + "destinationFinales/:id", {id: '@_id'},
         {
-            update: {method: "POST"}
+            update: {method: "POST"},
+            get: {method : "GET", url: api.url + "destinationFinales"}
         });
 }]);
 
 app.factory('Admin', ['$resource', 'api', function ($resource, api) {
-    return $resource(api.url + "authentification",
+    return $resource(api.url + "authentification",{},
         {
+            auth: {method : "POST", url : api.url+"authentification"}
         });
 }]);
 
@@ -74,14 +81,13 @@ app.controller("AdminController", ["$scope", "$location", "Admin", "Lieux", "Des
     };
 
     $scope.login = function() {
-        $scope.newAdmin = new Admin({
+        Admin.auth({
             username : $scope.username,
             password : $scope.password
-        });
-        $scope.newAdmin.$save(function(success) {
-            console.log(success);
-        },function (error) {
-            console.log(error)
+        },function (s) {
+            console.log(s)
+        },function (e) {
+            console.log(e)
         });
 
     };
@@ -158,42 +164,14 @@ app.controller("AdminController", ["$scope", "$location", "Admin", "Lieux", "Des
 
 app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux", "Destination", "leafletMarkerEvents", function ($scope, $location, $anchorScroll, Lieux, Destination, leafletMarkerEvents) {
 
+    $scope.username = "";
     $scope.jeuFini = false;
     $scope.indices = [];
     $scope.pointEnCour = 0;
     $scope.D = 1000;
     $scope.couleur = ["purple", "green", "cadetblue", "orange", "blue"];
-    $scope.destinationFinale = {
-        nom : "nom destiantion finale",
-        description : "description destination final",
-        indices : [{description : "indice1"},
-            {description: "indice2"},
-            {description : "indice3"}],
-        lat : 47,
-        lng : 2.5
-    };
-    $scope.points = [{
-        description : "description1",
-        lat: 48,
-        lng: 2
-    },{
-        description : "description2",
-        lat: 47,
-        lng: 3
-    },{
-        description : "description3",
-        lat: 47,
-        lng: 3
-    },{
-        description : "description4",
-        lat: 47,
-        lng: 3
-    },{
-        description : "description5",
-        lat: 47,
-        lng: 3
-    }
-    ];
+    $scope.destinationFinale = {};
+    $scope.points = [];
     $scope.indication = $scope.points[$scope.pointEnCour].description;
 
     $scope.paths = {
@@ -247,6 +225,22 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
         $scope.lat = args.model.lat;
         $scope.lng = args.model.lng;
     });
+
+    $scope.startGame = function() {
+        lieux = Lieux.query();
+        destinationFinale = Destination.query();
+        lieux.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
+        destinationFinale.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
+        $scope.points.push(lieux[0]);
+        $scope.points.push(lieux[1]);
+        $scope.points.push(lieux[2]);
+        $scope.points.push(lieux[3]);
+        $scope.points.push(lieux[4]);
+        $scope.destinationFinale = destinationFinale[0];
+
+        $location.path("/game");
+        $location.replace();
+    };
     
     $scope.validerPoint = function () {
         var dist = L.latLng($scope.lat, $scope.lng).distanceTo(L.latLng($scope.points[$scope.pointEnCour].lat, $scope.points[$scope.pointEnCour].lng))
