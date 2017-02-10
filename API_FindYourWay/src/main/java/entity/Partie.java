@@ -68,7 +68,6 @@ public class Partie implements Serializable{
     public Partie(List<Lieux> l, DestinationFinal d){
         this.lieux = l;
         this.destinationFinal = d;
-        //this.username = u;
         try {
             this.token=MessageDigest.getInstance("MD5").digest(Long.toBinaryString(System.currentTimeMillis()).getBytes()).toString();
         } catch (NoSuchAlgorithmException e) {
