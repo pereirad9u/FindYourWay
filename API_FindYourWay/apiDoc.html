@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Api document</title>
+</head>
+<body>
+    <div>
+        <h3>Indices</h3>
+        <p>
+            Get<br>
+            /api/indices<br>
+            description : Permet de récupérer tous les objets Indices<br>
+            Params : aucun<br>
+        </p>
+
+        <p>
+            Get<br>
+            /api/indices/{indicesId}<br>
+            description : Permet de récupérer l’indice correspondant ) l’id passé en paramètre.<br>
+            Params : aucun<br>
+        </p>
+
+        <p>
+            Post <br>
+            /api/indices<br>
+            description : Permet de sauvegarder un indices<br>
+            Params : {« description » :…}<br>
+        </p>
+
+        <p>
+            Delete<br>
+            /api/indices/{indicesId}<br>
+            description : Permet de supprimer l’indices correspondant à l’id passé en paramètre.<br>
+        </p>
+        <p>Les route Delete et Post de l’entity indices ne sont pas utilisées car les indices sont crés lors des  Post des entity Lieux et DestinationFinals.</p>
+    </div>
+
+    <div>
+        <h3> Lieux </h3>
+        <p>
+            GET<br>
+            /api/lieux<br>
+            description : Permet de récupérer tous les objets Lieux<br>
+            Params : aucun<br>
+        </p>
+
+        <p>
+            Get<br>
+            /api/lieux/{lieuxId}<br>
+            description : Permet de récupérer le lieux correspondant à l’id passé en paramètre.<br>
+            Params : aucun<br>
+        </p>
+
+        <p>
+            Post<br>
+            /api/lieux<br>
+            description : Permet de sauvegarder un lieux<br>
+            Params : { « description » : …,  « nom » :…, « image » :…., « lat » :…. , « lng » :…, « indice »:{« description » :…}}<br>
+        </p>
+
+        <p>
+            Delete
+            /api/lieux/{lieuxId}
+            description : Permet de supprimer le lieux correspondant à l’id passé en paramètre.
+            Params : aucun
+        </p>
+
+    </div>
+
+    <div>
+        <h3> DestinationFinls</h3>
+        <p>
+            Get<br>
+            /api/destinationFinals<br>
+            description : Permet de récupérer toutes les destinationFinals<br>
+            Params : aucun<br>
+        </p>
+        <p>
+            Get<br>
+            /api/destinationFinals/{destinationFinalsId}<br>
+            description : Permet de   récupérer la destinationFinals correspondant à l’id passé en paramètre.<br>
+            Params : aucun<br>
+        </p>
+        <p>
+            Get<br>
+            /api/destinationFinals/{destinationFinalsId}/indices<br>
+            description : Permet de récupérer la liste d’indices de la destinationFinals dont l’id est passé en paramètre.<br>
+            Params : aucun<br>
+        </p>
+        <p>
+            Post<br>
+            /api/destinationFinals<br>
+            description : Permet de sauvegarder une destinationFinals.<br>
+            Params : {« nom » :... ,  « description » :…, « image » :…., « lat » :….,  « lng » :…., « indices »:[{« description » :…},{« description » :….},{« description » :….},{« description » :….},{« description » :….}]}<br>
+        </p>
+        <p>
+            Delete<br>
+            /api/destinationFinals/{destinationFinalsId}<br>
+            description : Permet de supprimer la destinationFinals dont l’id est passé en paramètre.<br>
+            Params : aucun<br>
+        </p>
+    </div>
+
+    <div>
+        <h3>Partie</h3>
+        <p>
+            Post<br>
+            /api/partie<br>
+            description : Permet de créer une partie<br>
+            Params : {« etat » :…, « score » :…., « username » :...}<br>
+        </p>
+        <p>
+            Post<br>
+            /api/partie/{token}/{partieId}/addLieux/<br>
+            description : Permet d’assigné les lieux  à la partie dont l’id est passé en paramètre.<br>
+            Params : {[{« lieuxId » :…},{« lieuxId » :…},{« lieuxId » :…},{« lieuxId » :…},{« lieuxId » :...}]}<br>
+        </p>
+        <p>
+            Post
+            /api/partie/{tokent}/{partieId}/addDestinationFinal/{destinationFinalsId}
+            description : Permet d’assigné la destinationFinals à la partie dont l’id est passé en paramètre.
+            Params:aucun
+        </p>
+        <p>
+            Delete<br>
+            /api/partie/{tokent}/{partieId}<br>
+            description : Permet de supprimer la partie dont l’id est passé en paramètre.<br>
+            Params : aucun
+        </p>
+    </div>
+</body>
+</html>
