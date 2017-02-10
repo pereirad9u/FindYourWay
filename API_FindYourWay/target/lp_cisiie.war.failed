@@ -1,0 +1,7 @@
+"{
+    \"WFLYCTL0412: Required services that are not installed:\" => [\"jboss.naming.context.java.PostGreDS\"],
+    \"WFLYCTL0180: Services with missing/unavailable dependencies\" => [
+        \"jboss.persistenceunit.\\\"lp_cisiie.war#findyourwayPU\\\".__FIRST_PHASE__ is missing [jboss.naming.context.java.PostGreDS]\",
+        \"jboss.persistenceunit.\\\"lp_cisiie.war#findyourwayPU\\\" is missing [jboss.naming.context.java.PostGreDS]\"
+    ]
+}"

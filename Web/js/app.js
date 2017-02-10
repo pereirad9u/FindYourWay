@@ -189,7 +189,7 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
             $scope.destinationFinale = d[0];
 
             $scope.couleur = ["purple", "green", "cadetblue", "orange", "blue"];
-            $scope.indication = $scope.points[$scope.pointEnCour].description;
+            $scope.indication = $scope.points[$scope.pointEnCour].indice.description;
             $scope.paths = {};
             $scope.lat = $scope.markers[$scope.pointEnCour].lat;
             $scope.lng = $scope.markers[$scope.pointEnCour].lng;
@@ -218,7 +218,7 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
                 $scope.markers[$scope.pointEnCour].message = "Point "+($scope.pointEnCour+1);
                 $scope.pointEnCour++;
                 if ($scope.pointEnCour < 5) {
-                    $scope.indication = $scope.points[$scope.pointEnCour].description;
+                    $scope.indication = $scope.points[$scope.pointEnCour].indice.description;
                     $scope.markers[$scope.pointEnCour] = {
                         lat: 48,
                         lng: 2,
