@@ -2,6 +2,7 @@ package boundary;
 
 import entity.DestinationFinal;
 import entity.Indices;
+import provider.Secured;
 import sun.security.krb5.internal.crypto.Des;
 
 import javax.ejb.EJB;
@@ -19,8 +20,6 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class DestinationFinalRepresentation {
-
-    private String tokenAdmin = "admin";
 
     @EJB
     DestinationFinalRessource destinationFinalRessource;
@@ -62,27 +61,23 @@ public class DestinationFinalRepresentation {
     }
 
     @POST
-    @Path("/{tokenAdmin}")
-    public Response addDestinationFinal(@PathParam("tokenAdmin") String tokenAdmin, DestinationFinal destinationFinal, @Context UriInfo uriInfo){
-        if (tokenAdmin.equals(this.tokenAdmin)) {
+    @Secured
+    public Response addDestinationFinal(DestinationFinal destinationFinal, @Context UriInfo uriInfo){
             DestinationFinal newDestination = this.destinationFinalRessource.save(destinationFinal);
             URI uri = uriInfo.getAbsolutePathBuilder().path(newDestination.getId().toString()).build();
             return Response.created(uri)
                     .entity(newDestination)
                     .build();
-        }else{
-            return Response.serverError().status(403).build();
-        }
     }
 
     @DELETE
-    @Path("/{destinationFinalId}/{tokenAdmin}")
-    public void deleteDestinationFinal(@PathParam("destinationFinalId") Long id, @PathParam("tokenAdmin") String tokenAdmin) {
-        if (tokenAdmin.equals(this.tokenAdmin)) {
+    @Secured
+    @Path("/{destinationFinalId}")
+    public void deleteDestinationFinal(@PathParam("destinationFinalId") Long id) {
             this.destinationFinalRessource.delete(id);
-        }
     }
 
+    /**
     private String getUriForSelfDestiationFinal(UriInfo uriInfo, DestinationFinal df){
         String uri = uriInfo.getBaseUriBuilder()
                 .path(DestinationFinalRepresentation.class)
@@ -116,4 +111,5 @@ public class DestinationFinalRepresentation {
                 .build().toString();
         return uri;
     }
+     */
 }
