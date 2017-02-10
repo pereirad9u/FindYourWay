@@ -182,7 +182,7 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
     $scope.D = 1000;
     $scope.couleur = ["purple", "green", "cadetblue", "orange", "blue"];
     $scope.destinationFinale = {};
-    $scope.points = [{}];
+    $scope.points = [];
     $scope.indication = $scope.points[$scope.pointEnCour].description;
 
     $scope.paths = {
@@ -228,7 +228,7 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
 
     $scope.events = {
         markers: {
-            enable: leafletMarkerEvents.getAvailableEvents(),
+            enable: leafletMarkerEvents.getAvailableEvents()
         }
     };
 
@@ -238,22 +238,19 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
     });
 
     $scope.startGame = function() {
-        lieux = Lieux.query();
-        destinationFinale = Destination.query();
-        lieux.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
-        destinationFinale.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
-        $scope.points.push(lieux[0]);
-        $scope.points.push(lieux[1]);
-        $scope.points.push(lieux[2]);
-        $scope.points.push(lieux[3]);
-        $scope.points.push(lieux[4]);
-        $scope.destinationFinale = destinationFinale[0];
 
         $location.path("/game");
-        $location.replace();
+        $scope.points = Lieux.query();
+        $scope.destinationFinale = Destination.query();
     };
+
+        //lieux.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
+        //destinationFinale.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
+        //$scope.points = {0:lieux[0], 1:lieux[1], 2:lieux[2], 3:lieux[3], 4:lieux[4]};
+        /*console.log($scope.destinationFinale);*/
     
     $scope.validerPoint = function () {
+        console.log($scope.points);
         var dist = L.latLng($scope.lat, $scope.lng).distanceTo(L.latLng($scope.points[$scope.pointEnCour].lat, $scope.points[$scope.pointEnCour].lng))
         if (dist < $scope.D) {
             $scope.indices[$scope.pointEnCour] = $scope.destinationFinale.indices[$scope.pointEnCour];
