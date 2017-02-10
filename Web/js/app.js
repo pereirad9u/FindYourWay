@@ -1,9 +1,8 @@
 var app = angular.module('findYourWay', ['ngRoute', 'ngResource', 'leaflet-directive']);
 app.constant('api', {'url': 'http://127.0.0.1:8080/lp_cisiie/api/'});
 
-
-app.config(['$routeProvider', '$httpProvider',
-    function ($routeProvider, $httpProvider) {
+app.config(['$routeProvider', '$httpProvider', 'TokenServiceProvider',
+    function ($routeProvider, $httpProvider, TokenServiceProvider) {
         // Système de routage
         $routeProvider
             .when('/home', {
@@ -34,8 +33,10 @@ app.config(['$routeProvider', '$httpProvider',
             .otherwise({
                 redirectTo: '/home'
             });
+        var ts = TokenServiceProvider.$get();
+        if (ts.getToken() != null)
+            $httpProvider.defaults.headers.common.Authorization = ts.getToken();
     }
-
 ]);
 
 app.factory('Lieux', ['$resource', 'api', function ($resource, api) {
@@ -61,7 +62,16 @@ app.factory('Admin', ['$resource', 'api', function ($resource, api) {
         });
 }]);
 
-app.controller("AdminController", ["$scope", "$location", "Admin", "Lieux", "Destination", "leafletMarkerEvents", function ($scope, $location, Admin, Lieux, Destination, leafletMarkerEvents) {
+app.service('TokenService', [function () {
+    this.setToken = function (t) {
+        localStorage.setItem("token", "Bearer "+t);
+    };
+    this.getToken = function () {
+        return localStorage.getItem("token");
+    }
+}]);
+
+app.controller("AdminController", ["$scope",  "$location", "TokenService", "Admin", "Lieux", "Destination", "leafletMarkerEvents", function ($scope, $location, TokenService, Admin, Lieux, Destination, leafletMarkerEvents) {
 
     $scope.choixPoint = true;
 
@@ -85,11 +95,12 @@ app.controller("AdminController", ["$scope", "$location", "Admin", "Lieux", "Des
             username : $scope.username,
             password : $scope.password
         },function (s) {
-            console.log(s)
+            console.log(s);
+            TokenService.setToken(s.token);
+            $location.path("/admin");
         },function (e) {
             console.log(e)
         });
-
     };
 
     $scope.lat = $scope.markers.point.lat;
@@ -118,7 +129,7 @@ app.controller("AdminController", ["$scope", "$location", "Admin", "Lieux", "Des
           description : $scope.description,
           lat : $scope.lat,
           lng : $scope.lng,
-          indices : [{description : $scope.indice1},
+          indice : [{description : $scope.indice1},
               {description : $scope.indice2},
               {description : $scope.indice3},
               {description : $scope.indice4},
@@ -171,7 +182,7 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
     $scope.D = 1000;
     $scope.couleur = ["purple", "green", "cadetblue", "orange", "blue"];
     $scope.destinationFinale = {};
-    $scope.points = [];
+    $scope.points = [{}];
     $scope.indication = $scope.points[$scope.pointEnCour].description;
 
     $scope.paths = {

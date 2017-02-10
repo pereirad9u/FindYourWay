@@ -28,7 +28,7 @@ private final static Logger log = Logger.getLogger(CORSResponseFilter.class.getN
         responseCtx.getHeaders().add("Access-Control-Allow-Origin", "*");
         responseCtx.getHeaders().add("Access-Control-Allow-Credentials", "true");
         responseCtx.getHeaders().add("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT");
-        responseCtx.getHeaders().add("Access-Control-Allow-Headers", "content-type");
+        responseCtx.getHeaders().add("Access-Control-Allow-Headers", "content-type,Authorization");
     } 
         
         
