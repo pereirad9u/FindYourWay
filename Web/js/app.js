@@ -181,16 +181,30 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
             $scope.indices = [];
             $scope.pointEnCour = 0;
             $scope.D = 1000;
-            s.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
             console.log(s);
+            s.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
+
             $scope.points = {0:s[0], 1:s[1], 2:s[2], 3:s[3], 4:s[4]};
             d.sort(function() { return [1, -1, 0][Math.random() *3 |0];});
             console.log(d);
             $scope.destinationFinale = d[0];
 
             $scope.couleur = ["purple", "green", "cadetblue", "orange", "blue"];
-            $scope.indication = $scope.points[$scope.pointEnCour].indice.description;
-            $scope.paths = {};
+            $scope.indication = $scope.points[$scope.pointEnCour].description;
+            $scope.paths =
+            {
+                p1: {
+                    color: 'red',
+                        weight: 8,
+                        latlngs: [
+                        { lat: 51.50, lng: -0.082 },
+                        { lat: 48.83, lng: 2.37 },
+                        { lat: 41.91, lng: 12.48 }
+                    ],
+                        message: "<h3>Route from London to Rome</h3><p>Distance: 1862km</p>",
+                }
+            };
+
             $scope.lat = $scope.markers[$scope.pointEnCour].lat;
             $scope.lng = $scope.markers[$scope.pointEnCour].lng;
 
@@ -218,7 +232,7 @@ app.controller("GameController", ["$scope", "$location", "$anchorScroll", "Lieux
                 $scope.markers[$scope.pointEnCour].message = "Point "+($scope.pointEnCour+1);
                 $scope.pointEnCour++;
                 if ($scope.pointEnCour < 5) {
-                    $scope.indication = $scope.points[$scope.pointEnCour].indice.description;
+                    $scope.indication = $scope.points[$scope.pointEnCour].description;
                     $scope.markers[$scope.pointEnCour] = {
                         lat: 48,
                         lng: 2,

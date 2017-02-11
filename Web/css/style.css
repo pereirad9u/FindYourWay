@@ -18,6 +18,11 @@
     max-width: 100%;
 }
 
+.angular-leaflet-map svg{
+    width: initial;
+    height: initial;
+}
+
 
 /* EXAMPLE 5 - Logo with Text*/
 .nav-with-logo .navbar-brand {
